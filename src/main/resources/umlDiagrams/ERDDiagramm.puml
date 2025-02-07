@@ -1,24 +1,22 @@
 @startuml
 
 entity PersInf {
-    +id: serial
+    +id: int
     +Surname: varchar(40)
     +Name: varchar(40)
+    +birthYear: int
     +phoneNumber: varchar(40)
     +email: varchar(40)
-    +create: timestamp
-    +update: timestamp
 }
 
 entity ProfInf {
-    +PersInfId: int FK(PersInf(id))
+    +id: int
+    +PersId: int FK(PersInf(id))
     +skillName: varchar(40)
     +skillDescription: varchar
     +cost: numeric(6,2)
     +persDescription: varchar
     +exp: int
-    +create: timestamp
-    +update: timestamp
 }
 
 entity SkillExchange{
@@ -34,8 +32,6 @@ entity Review {
     +comment: varchar
     +reviewer: int FK(PersInf(id))
     +userEvaluated: int FK(ProfInf(id))
-    +create: timestamp
-    +update: timestamp
 }
 
 entity Transaction {

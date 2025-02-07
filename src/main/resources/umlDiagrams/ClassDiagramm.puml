@@ -4,12 +4,14 @@ class PersInf {
     -id: String
     -Surname: String
     -Name: String
+    -DataBorn: int
     -phoneNumber: String
     -email: String
 }
 
 class ProfInf {
-    -persId: String
+    -id: String
+    -pers_Id: String
     -skillName: String
     -skillDescription: String
     -cost: Double
