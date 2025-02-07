@@ -16,7 +16,7 @@
 - Диаграмма вариантов использования:
   ![фото](img/UseCaseDiagram.png)
 - Диаграмма классов:
-- 
+
   ![фото](img/ClassDiagram.png)
 - Диаграмма базы данных:
   ![фото](img/ERDDiagram.png)
