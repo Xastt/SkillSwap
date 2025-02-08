@@ -8,8 +8,8 @@ import java.util.List;
 import java.util.UUID;
 
 @Entity
-@Getter
-@Setter
+//@Getter
+//@Setter
 @Table(name = "persinf")
 public class PersInf {
 
@@ -29,10 +29,8 @@ public class PersInf {
     private String name;
 
     @Column(name = "birthyear")
-    @NotEmpty(message = "Enter your birth year!")
     @Min(value = 1900, message = "Your birth year should be more than 1900!")
-    @Pattern(regexp = "^(19|20)\\d{2}$",
-            message = "Birth year must be in the format yyyy")
+    @Max(value = 2100, message = "Your birth year should be less than 2100!")
     private int birthYear;
 
     @Column(name = "phonenumber")
@@ -57,5 +55,61 @@ public class PersInf {
         this.name = name;
         this.phoneNumber = phoneNumber;
         this.email = email;
+    }
+
+    public UUID getId() {
+        return id;
+    }
+
+    public void setId(UUID id) {
+        this.id = id;
+    }
+
+    public String getSurname() {
+        return surname;
+    }
+
+    public void setSurname(String surname) {
+        this.surname = surname;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
+
+    public int getBirthYear() {
+        return birthYear;
+    }
+
+    public void setBirthYear(int birthYear) {
+        this.birthYear = birthYear;
+    }
+
+    public List<ProfInf> getProvidedSkills() {
+        return providedSkills;
+    }
+
+    public void setProvidedSkills(List<ProfInf> providedSkills) {
+        this.providedSkills = providedSkills;
     }
 }

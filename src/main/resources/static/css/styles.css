@@ -1,0 +1,169 @@
+html, body, div, span, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, a, abbr,
+acronym, address, big, cite, code, del, dfn, em, img, ins, kbd, q, s, samp,small, strike,
+strong, sub, sup, tt, var, b, u, i, center, dl, dt, dd, ol, ul, li, fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td, article, aside, canvas, details, embed,
+figure, figcaption, footer, header, hgroup, menu, nav, output, ruby, section, summary,
+time, mark, audio, video {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    font-size: 100%;
+    vertical-align: baseline;
+}
+article, aside, details, figcaption, figure, footer, header, hgroup, menu, nav, section {
+    display: block;
+}
+body {
+    line-height: 1.2;
+}
+ol {
+    padding-left: 1.4em;
+    list-style: decimal;
+}
+ul {
+    padding-left: 1.4em;
+    list-style: square;
+}
+table {
+    border-collapse: collapse;
+    border-spacing: 0;
+}
+*{
+    box-sizing: border-box;
+}
+
+.clear:after {
+    content: " ";
+    display: table;
+    clear: both;
+}
+
+.clear {
+    zoom: 1;
+}
+
+body {
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    background-color: lightblue;
+}
+
+
+header {
+    background-color:rgb(93,43,78);
+    background-image: -webkit-linear-gradient(right, rgb(93,43,78), rgb(8,2,50));
+    padding-bottom: 30px;
+}
+
+header h1, h1 {
+    font-size: 3em;
+    color: white;
+    font-weight: bold;
+    padding-top: 30px;
+    clear: both;
+    padding-left: 10px;
+}
+
+h1{ font-size: 2em;
+    color: black;
+    font-weight: bold;
+    padding-top: 10px;
+    clear: both;
+    padding-left: 10px;}
+
+nav {
+    background-color: rgb(25,25,25);
+    border: 1px solid rgba(255,255,255,.5);
+    border-left: none;
+    border-right: none;
+}
+nav ul {
+    padding: 0;
+    margin: 0;
+}
+nav li {
+    float: left;
+    padding: 0;
+    margin: 0;
+    list-style: none;
+}
+nav a {
+    float: left;
+    font-size: .8em;
+    color: white;
+    font-weight: normal;
+    text-decoration: none;
+    padding: 10px;
+    border-right: 1px solid rgba(255,255,255,.75);
+    -webkit-transition: all .5s;
+    -moz-transition: all .5s;
+    -o-transition: all .5s;
+    transition: all .5s;
+}
+nav li:last-of-type a {
+    border-right: none;
+}
+nav a:hover {
+    background-color: rgb(93,43,78);
+}
+.for-list {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+.for-list p {
+    width: 100%;
+    margin: 10px 0;
+}
+
+.for-list a {
+    display: block;
+    padding: 10px;
+    background-color: #f0f0f0;
+    border-radius: 5px;
+    text-decoration: none;
+    color: #333;
+    transition: background-color 0.3s;
+}
+
+.for-list a:hover {
+    background-color: #e0e0e0;
+}
+
+form {
+    max-width: 400px;
+    background: #fff;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    margin-left: 0;
+}
+
+label {
+    display: block;
+    margin: 10px 0 5px;
+}
+
+input[type="text"] {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+input[type="submit"] {
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+input[type="submit"]:hover {
+    background-color: #45a049;
+}
