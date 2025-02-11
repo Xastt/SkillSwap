@@ -1,4 +1,4 @@
-CREATE TABLE persinf (
+CREATE TABLE IF NOT EXISTS persinf (
                          id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
                          surname VARCHAR(60) NOT NULL,
                          name VARCHAR(60) NOT NULL,
@@ -9,7 +9,7 @@ CREATE TABLE persinf (
 
 CREATE INDEX idx_persinf_surname ON persinf(surname);
 
-CREATE TABLE profinf (
+CREATE TABLE IF NOT EXISTS profinf (
                          id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
                          pers_id UUID NOT NULL,
                          skillname VARCHAR(60) NOT NULL,
