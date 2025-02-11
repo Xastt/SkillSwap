@@ -45,6 +45,12 @@ public class PersInf {
             message = "Please, enter correct email")
     private String email;
 
+    @Column(name = "password")
+    private String password;
+
+    @Column(name = "role")
+    private String role;
+
     @OneToMany(mappedBy = "pers_id")
     private List<ProfInf> providedSkills;
 

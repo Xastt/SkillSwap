@@ -4,7 +4,9 @@ CREATE TABLE IF NOT EXISTS persinf (
                          name VARCHAR(60) NOT NULL,
                          birthyear INT NOT NULL CHECK (birthyear > 1900),
                          phonenumber VARCHAR NOT NULL,
-                         email VARCHAR NOT NULL
+                         email VARCHAR NOT NULL UNIQUE ,
+                         password VARCHAR NOT NULL UNIQUE,
+                         role VARCHAR NOT NULL
 );
 
 CREATE INDEX idx_persinf_surname ON persinf(surname);
