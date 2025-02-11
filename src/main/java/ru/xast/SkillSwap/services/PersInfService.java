@@ -6,6 +6,7 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.xast.SkillSwap.models.PersInf;
 import ru.xast.SkillSwap.repositories.PersInfRepository;
 
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -26,6 +27,11 @@ public class PersInfService {
     @Transactional(readOnly = true)
     public PersInf findOne(UUID id) {
         return persInfRepository.findById(id).orElse(null);
+    }
+
+    @Transactional(readOnly = true)
+    public List<PersInf> findAll() {
+        return persInfRepository.findAll();
     }
 
     public void update(UUID id, PersInf updatedPersInf){

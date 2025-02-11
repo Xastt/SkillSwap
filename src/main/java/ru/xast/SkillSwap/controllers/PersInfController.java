@@ -27,14 +27,14 @@ public class PersInfController {
     }
 
     @GetMapping()
-    public String index(){
+    public String index(Model model){
+        model.addAttribute("profInf", profInfService.findAll());
         return "persInf/index";
     }
 
     @GetMapping("/{id}")
     public String show(@PathVariable("id") UUID id, Model model) {
         model.addAttribute("persInf", persInfService.findOne(id));
-       // model.addAttribute("books", profInfService.getBooksByPersonId(id));
         return "persInf/show";
     }
 

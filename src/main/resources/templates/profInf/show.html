@@ -1,0 +1,64 @@
+<!--<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <link rel="stylesheet" th:href="@{/css/styles_show.css}">
+    <meta charset="UTF-8">
+    <title>Update book</title>
+</head>
+<body>
+
+<article>
+    <div class="content-wrapper">
+        <header>
+            <nav class="clear">
+                <ul>
+                    <li><a href="/people">Person page</a></li>
+                    <li><a href="/books">Books page</a></li>
+                    <li><a href="/people/new">New person</a></li>
+                </ul>
+            </nav>
+            <h1>Library Web App</h1>
+        </header>
+    </div>
+    <ul>
+        <div class="container">
+            <h1 class = "inf">Person information:</h1>
+
+            <p th:text="${person.getFullName() + ', ' + person.getData_born()}">VALUE</p>
+
+            <div th:if="${books.isEmpty()}">
+                <p style="color: red">The man hasn't picked up any books yet</p>
+                <hr/>
+            </div>
+
+            <div th:if="${!books.isEmpty()}">
+                <hr/>
+                <b>Boooks:</b>
+                <br/>
+                <table th:each="book : ${books}">
+                    <tr>
+                        <td>
+                <span th:text="${book.getName() + ', ' + book.getAuthor() + ', ' + book.getYear()}"
+                      th:style="${book.isExpired()} ? 'color: red' : 'color: black'">
+                    book
+                </span>
+                        </td>
+                    </tr>
+                </table>
+                <hr/>
+            </div>
+
+            <form th:method="GET" th:action="@{/people/{id}/edit(id=${person.getId()})}">
+                <input class = "input-btn" type="submit" value="Edit"/>
+            </form>
+
+
+            <form th:method="DELETE" th:action="@{/people/{id}(id=${person.getId()})}">
+                <input class = "input-btn" type="submit" value="Delete"/>
+            </form>
+        </div>
+    </ul>
+</article>
+
+</body>
+</html>-->

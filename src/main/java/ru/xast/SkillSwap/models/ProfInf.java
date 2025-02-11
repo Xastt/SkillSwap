@@ -24,25 +24,23 @@ public class ProfInf {
     @Column(name = "skillname")
     @NotEmpty(message = "Enter your SkillName!")
     @Size(min = 2, max = 60, message = "Your SkillName should be between 2 and 60!")
-    private String SkillName;
+    private String skillName;
 
     @Column(name = "skilldescription")
     @NotEmpty(message = "Enter your SkillDescription!")
     @Size(max = 1000, message = "Your SkillDescription should be between 0 and 1000!")
-    private String SkillDescription;
+    private String skillDescription;
 
     @Column(name = "cost")
-    @NotEmpty(message = "Enter the cost!")
     @Min(value = 0, message = "Your cost should be more than 0!")
     private Double cost;
 
     @Column(name = "persdescription")
     @NotEmpty(message = "Enter your PersDescription!")
     @Size(max = 1000, message = "Your PersDescription should be between 0 and 1000!")
-    private String PersDescription;
+    private String persDescription;
 
     @Column(name = "exp")
-    @NotEmpty(message = "Enter the experience!")
     @Min(value = 0, message = "Your experience should be more than 0!")
     private Double exp;
 
@@ -53,10 +51,10 @@ public class ProfInf {
 
     public ProfInf(PersInf pers_id, String skillName, Double cost, String skillDescription, String persDescription, Double exp) {
         this.pers_id = pers_id;
-        SkillName = skillName;
+        this.skillName = skillName;
         this.cost = cost;
-        SkillDescription = skillDescription;
-        PersDescription = persDescription;
+        this.skillDescription = skillDescription;
+        this.persDescription = persDescription;
         this.exp = exp;
         this.rating = 0.0;
     }
