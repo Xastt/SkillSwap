@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import lombok.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -17,6 +18,10 @@ public class PersInf {
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
+
+    @OneToOne
+    @JoinColumn(name = "user_id", nullable = false)
+    private Users user;
 
     @Column(name = "surname")
     @NotEmpty(message = "Enter your surname!")
@@ -45,14 +50,8 @@ public class PersInf {
             message = "Please, enter correct email")
     private String email;
 
-    @Column(name = "password")
-    private String password;
-
-    @Column(name = "role")
-    private String role;
-
-    @OneToMany(mappedBy = "pers_id")
-    private List<ProfInf> providedSkills;
+    @OneToMany(mappedBy = "pers", cascade = CascadeType.ALL)
+    private List<ProfInf> providedSkills = new ArrayList<>();
 
     public PersInf() {}
 

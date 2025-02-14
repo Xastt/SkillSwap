@@ -18,8 +18,12 @@ public class ProfInf {
     private UUID id;
 
     @ManyToOne
-    @JoinColumn(name = "pers_id", referencedColumnName = "id")
-    private PersInf pers_id;
+    @JoinColumn(name = "pers_id", nullable = false)
+    private PersInf pers;
+
+    @OneToOne
+    @JoinColumn(name = "user_id", nullable = false)
+    private Users user;
 
     @Column(name = "skillname")
     @NotEmpty(message = "Enter your SkillName!")
@@ -49,8 +53,9 @@ public class ProfInf {
 
     public ProfInf() {}
 
-    public ProfInf(PersInf pers_id, String skillName, Double cost, String skillDescription, String persDescription, Double exp) {
-        this.pers_id = pers_id;
+    public ProfInf(PersInf pers, Users user, String skillName, Double cost, String skillDescription, String persDescription, Double exp) {
+        this.pers = pers;
+        this.user = user;
         this.skillName = skillName;
         this.cost = cost;
         this.skillDescription = skillDescription;
