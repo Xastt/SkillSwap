@@ -53,7 +53,7 @@ public class ProfInfService {
     public void saveWithPersInf(UUID persInfId, ProfInf profInf) {
         PersInf persInf = persInfRepository.findById(persInfId).orElse(null);
         if (persInf != null) {
-            profInf.setPers_id(persInf);
+            profInf.setPers(persInf);
             profInfRepository.save(profInf);
         } else {
             throw new EntityNotFoundException("Personal information not found for ID: " + persInfId);
