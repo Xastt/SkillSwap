@@ -2,14 +2,20 @@ package ru.xast.SkillSwap.controllers;
 
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import ru.xast.SkillSwap.models.PersInf;
-import ru.xast.SkillSwap.models.ProfInf;
+import ru.xast.SkillSwap.models.Users;
+import ru.xast.SkillSwap.repositories.UsersRepository;
 import ru.xast.SkillSwap.services.PersInfService;
 import ru.xast.SkillSwap.services.ProfInfService;
+import org.springframework.security.core.Authentication;
+import ru.xast.SkillSwap.services.UsersDetailsService;
+
 
 import java.util.UUID;
 
@@ -17,13 +23,17 @@ import java.util.UUID;
 @RequestMapping("/persInf")
 public class PersInfController {
 
+    private final UsersDetailsService usersDetailsService;
     private final PersInfService persInfService;
     private final ProfInfService profInfService;
+    private final UsersRepository usersRepository;
 
     @Autowired
-    public PersInfController(PersInfService persInfService, ProfInfService profInfService) {
+    public PersInfController(UsersDetailsService usersDetailsService, PersInfService persInfService, ProfInfService profInfService, UsersRepository usersRepository) {
+        this.usersDetailsService = usersDetailsService;
         this.persInfService = persInfService;
         this.profInfService = profInfService;
+        this.usersRepository = usersRepository;
     }
 
     @GetMapping()
@@ -49,6 +59,15 @@ public class PersInfController {
         if (bindingResult.hasErrors()) {
             return "persInf/new";
         }
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        String username  = authentication.getName();
+
+        Users user = usersRepository.findByUsername(username)
+                        .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+
+        persInf.setUser(user);
 
         persInfService.save(persInf);
         return "redirect:/persInf";
