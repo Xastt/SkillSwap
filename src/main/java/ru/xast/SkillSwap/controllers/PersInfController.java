@@ -2,20 +2,15 @@ package ru.xast.SkillSwap.controllers;
 
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import ru.xast.SkillSwap.models.PersInf;
 import ru.xast.SkillSwap.models.Users;
-import ru.xast.SkillSwap.repositories.UsersRepository;
 import ru.xast.SkillSwap.services.PersInfService;
 import ru.xast.SkillSwap.services.ProfInfService;
-import org.springframework.security.core.Authentication;
 import ru.xast.SkillSwap.services.UsersDetailsService;
-
 
 import java.util.UUID;
 
@@ -23,17 +18,16 @@ import java.util.UUID;
 @RequestMapping("/persInf")
 public class PersInfController {
 
-    private final UsersDetailsService usersDetailsService;
     private final PersInfService persInfService;
     private final ProfInfService profInfService;
-    private final UsersRepository usersRepository;
+    private final UsersDetailsService userDetailsService;
 
     @Autowired
-    public PersInfController(UsersDetailsService usersDetailsService, PersInfService persInfService, ProfInfService profInfService, UsersRepository usersRepository) {
-        this.usersDetailsService = usersDetailsService;
+    public PersInfController(PersInfService persInfService, ProfInfService profInfService, UsersDetailsService userDetailsService) {
         this.persInfService = persInfService;
         this.profInfService = profInfService;
-        this.usersRepository = usersRepository;
+
+        this.userDetailsService = userDetailsService;
     }
 
     @GetMapping()
@@ -60,12 +54,7 @@ public class PersInfController {
             return "persInf/new";
         }
 
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-
-        String username  = authentication.getName();
-
-        Users user = usersRepository.findByUsername(username)
-                        .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+        Users user = userDetailsService.getCurrentUser();
 
         persInf.setUser(user);
 
@@ -76,7 +65,17 @@ public class PersInfController {
 
     @GetMapping("/{id}/edit")
     public String edit(Model model, @PathVariable("id") UUID id) {
-        model.addAttribute("persInf", persInfService.findOne(id));
+
+        Users currentUser = userDetailsService.getCurrentUser();
+
+        PersInf existingPersInf = persInfService.findOne(id);
+
+        // Проверяем совпадение user_id
+        if (!existingPersInf.getUser().getId().equals(currentUser.getId())) {
+            return "redirect:/error/mismatchid"; // Перенаправление на страницу ошибки
+        }
+
+        model.addAttribute("persInf", existingPersInf);
         return "persInf/edit";
     }
 
@@ -94,7 +93,21 @@ public class PersInfController {
 
     @DeleteMapping("/{id}")
     public String delete(@PathVariable("id") UUID id) {
+
+        Users currentUser = userDetailsService.getCurrentUser();
+
+        PersInf existingPersInf = persInfService.findOne(id);
+
+        // Проверяем совпадение user_id
+        if (!existingPersInf.getUser().getId().equals(currentUser.getId())) {
+            // Обработка случая, когда идентификаторы не совпадают, можно выкинуть исключение
+            return "redirect:/error/mismatchid";
+        }
+
+
         persInfService.delete(id);
         return "redirect:/persInf";
     }
+
+
 }

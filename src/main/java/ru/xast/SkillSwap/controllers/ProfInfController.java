@@ -6,8 +6,12 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import ru.xast.SkillSwap.models.PersInf;
 import ru.xast.SkillSwap.models.ProfInf;
+import ru.xast.SkillSwap.models.Users;
+import ru.xast.SkillSwap.services.PersInfService;
 import ru.xast.SkillSwap.services.ProfInfService;
+import ru.xast.SkillSwap.services.UsersDetailsService;
 
 import java.util.UUID;
 
@@ -16,10 +20,14 @@ import java.util.UUID;
 public class ProfInfController {
 
     private final ProfInfService profInfService;
+    private final UsersDetailsService userDetailsService;
+    private final PersInfService persInfService;
 
     @Autowired
-    public ProfInfController(ProfInfService profInfService) {
+    public ProfInfController(ProfInfService profInfService, UsersDetailsService userDetailsService, PersInfService persInfService) {
         this.profInfService = profInfService;
+        this.userDetailsService = userDetailsService;
+        this.persInfService = persInfService;
     }
 
     @GetMapping()
@@ -46,13 +54,30 @@ public class ProfInfController {
             return "profInf/new";
         }
 
+        Users user = userDetailsService.getCurrentUser();
+        profInf.setUser(user);
+
+        UUID persId = profInf.getPers().getId();
+
+        PersInf persInf = persInfService.findOne(persId);
+        profInf.setPers(persInf);
+
         profInfService.save(profInf);
         return "redirect:/profInf";
-
     }
 
     @GetMapping("/{id}/edit")
     public String edit(Model model, @PathVariable("id") UUID id) {
+
+        Users currentUser = userDetailsService.getCurrentUser();
+
+        ProfInf existingProfInf = profInfService.findOne(id);
+
+        // Проверяем совпадение user_id
+        if(!existingProfInf.getUser().getId().equals(currentUser.getId())){
+            return "redirect:/error/mismatchid";// Перенаправление на страницу ошибки
+        }
+
         model.addAttribute("profInf", profInfService.findOne(id));
         return "profInf/edit";
     }
@@ -71,7 +96,22 @@ public class ProfInfController {
 
     @DeleteMapping("/{id}")
     public String delete(@PathVariable("id") UUID id) {
+
+        Users currentUser = userDetailsService.getCurrentUser();
+
+        //ProfInf для удаления
+        ProfInf existingProfInf = profInfService.findOne(id);
+
+        // Проверяем совпадение user_id
+        if (!existingProfInf.getUser().getId().equals(currentUser.getId())) {
+            // Обработка случая, когда идентификаторы не совпадают, можно выкинуть исключение
+            return "redirect:/error/mismatchid";
+        }
+
+
         profInfService.delete(id);
         return "redirect:/profInf";
     }
+
+
 }
