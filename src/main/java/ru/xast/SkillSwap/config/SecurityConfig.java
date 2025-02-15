@@ -27,13 +27,13 @@ public class SecurityConfig{
                 .authorizeHttpRequests(authorizeHttpRequests ->
                         authorizeHttpRequests
                                 .requestMatchers("/admin").hasRole("ADMIN")
-                                .requestMatchers("/auth/login","auth/registration","/persInf", "/profInf").permitAll()
+                                .requestMatchers("/auth/login","auth/registration","/auth/welcome").permitAll()
                                 .anyRequest().hasAnyRole("USER","ADMIN")
                 )
                 .formLogin(form -> form
                         .loginPage("/auth/login")
                         .loginProcessingUrl("/process_login")
-                        .defaultSuccessUrl("/persInf", true)
+                        .defaultSuccessUrl("/persInf/new", true)//поменять на persInf
                         .failureUrl("/auth/login?error")
                 )
                 .build();
