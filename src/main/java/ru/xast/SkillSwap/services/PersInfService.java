@@ -30,6 +30,11 @@ public class PersInfService {
     }
 
     @Transactional(readOnly = true)
+    public PersInf findPersInfByUserId(UUID userId) {
+        return persInfRepository.findPersInfByUserId(userId);
+    }
+
+    @Transactional(readOnly = true)
     public List<PersInf> findAll() {
         return persInfRepository.findAll();
     }

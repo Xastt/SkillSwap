@@ -57,9 +57,10 @@ public class ProfInfController {
         Users user = userDetailsService.getCurrentUser();
         profInf.setUser(user);
 
-        UUID persId = profInf.getPers().getId();
+        //достать по айдишнику user_id
 
-        PersInf persInf = persInfService.findOne(persId);
+        PersInf persInf = persInfService.findPersInfByUserId(user.getId());
+
         profInf.setPers(persInf);
 
         profInfService.save(profInf);

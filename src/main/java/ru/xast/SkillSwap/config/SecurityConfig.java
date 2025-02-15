@@ -39,11 +39,6 @@ public class SecurityConfig{
                 .build();
     }
 
-    /*protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(usersDetailsService)
-                .passwordEncoder(getPasswordEncoder());
-    }*/
-
     @Bean
     public AuthenticationManager authManager(HttpSecurity http) throws Exception {
         AuthenticationManagerBuilder authenticationManagerBuilder =
@@ -53,10 +48,8 @@ public class SecurityConfig{
         return authenticationManagerBuilder.build();
     }
 
-
     @Bean
     public PasswordEncoder getPasswordEncoder() {
         return new BCryptPasswordEncoder();
     }
-
 }

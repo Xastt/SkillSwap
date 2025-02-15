@@ -11,7 +11,6 @@ import ru.xast.SkillSwap.models.Users;
 import ru.xast.SkillSwap.services.PersInfService;
 import ru.xast.SkillSwap.services.ProfInfService;
 import ru.xast.SkillSwap.services.UsersDetailsService;
-
 import java.util.UUID;
 
 @Controller
