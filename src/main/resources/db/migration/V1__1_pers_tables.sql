@@ -29,7 +29,7 @@ CREATE TABLE IF NOT EXISTS profinf (
                          cost DOUBLE PRECISION NOT NULL CHECK (cost >= 0),
                          persdescription VARCHAR(1000) NOT NULL,
                          exp DOUBLE PRECISION NOT NULL CHECK (exp >= 0),
-                         rating DOUBLE PRECISION,
+                         rating DOUBLE PRECISION DEFAULT 0.0,
                          FOREIGN KEY (pers_id) REFERENCES persinf(id) ON DELETE CASCADE,
                          FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 );

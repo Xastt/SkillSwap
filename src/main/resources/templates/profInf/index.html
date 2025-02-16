@@ -46,7 +46,7 @@
         <div class = "for-list">
             <p th:each="skill : ${profInf}">
                 <a th:href="@{/profInf/{id}(id=${skill.getId()})}"
-                   th:text="${skill.getSkillName() + ', ' + skill.getCost()}">user</a>
+                   th:text="${skill.getSkillName() + ', ' + skill.getCost() + ', ' + skill.getRating()}">user</a>
             </p>
         </div>
     </ul>
