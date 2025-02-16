@@ -36,12 +36,11 @@
             <p>Make sure that you are entered your personal information on the
                 platform to continue enjoying all the benefits of this technology.</p>
             <p>To access all personal information, please complete the initial registration process</p>
-            <p>Here's what I can offer:</p>
+            <h1>Here's what I can offer:</h1>
         </div>
     </ul>
 
     <ul>
-        <h1>Skills list:</h1>
         <div class = "for-list">
             <p th:each="skill : ${profInf}">
                 <a th:href="@{/profInf/{id}(id=${skill.getId()})}"

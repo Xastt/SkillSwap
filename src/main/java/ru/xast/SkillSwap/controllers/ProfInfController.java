@@ -38,6 +38,7 @@ public class ProfInfController {
 
     @GetMapping("/{id}")
     public String show(@PathVariable("id") UUID id, Model model) {
+
         model.addAttribute("profInf", profInfService.findOne(id));
         return "profInf/show";
     }
@@ -57,7 +58,6 @@ public class ProfInfController {
         Users user = userDetailsService.getCurrentUser();
         profInf.setUser(user);
 
-        //достать по айдишнику user_id
 
         PersInf persInf = persInfService.findPersInfByUserId(user.getId());
 
@@ -74,9 +74,8 @@ public class ProfInfController {
 
         ProfInf existingProfInf = profInfService.findOne(id);
 
-        // Проверяем совпадение user_id
         if(!existingProfInf.getUser().getId().equals(currentUser.getId())){
-            return "redirect:/error/mismatchid";// Перенаправление на страницу ошибки
+            return "redirect:/error/mismatchid";
         }
 
         model.addAttribute("profInf", profInfService.findOne(id));
@@ -90,6 +89,14 @@ public class ProfInfController {
             return "profInf/edit";
         }
 
+        Users user = userDetailsService.getCurrentUser();
+
+        profInf.setUser(user);
+
+        PersInf persInf = persInfService.findPersInfByUserId(user.getId());
+
+        profInf.setPers(persInf);
+
         profInfService.update(id, profInf);
         return "redirect:/profInf";
 
@@ -100,15 +107,11 @@ public class ProfInfController {
 
         Users currentUser = userDetailsService.getCurrentUser();
 
-        //ProfInf для удаления
         ProfInf existingProfInf = profInfService.findOne(id);
 
-        // Проверяем совпадение user_id
         if (!existingProfInf.getUser().getId().equals(currentUser.getId())) {
-            // Обработка случая, когда идентификаторы не совпадают, можно выкинуть исключение
             return "redirect:/error/mismatchid";
         }
-
 
         profInfService.delete(id);
         return "redirect:/profInf";

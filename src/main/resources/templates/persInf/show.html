@@ -13,7 +13,7 @@
             <nav class="clear">
                 <ul>
                     <li><a href="/persInf">Person page</a></li>
-                    <li><a href="/profInf">Books page</a></li>
+                    <li><a href="/profInf">Skills page</a></li>
                 </ul>
             </nav>
             <h1>SkillSwap</h1>
@@ -23,7 +23,12 @@
         <div class="container">
             <h1 class = "inf">Person information:</h1>
 
-            <p th:text="${persInf.getName() + ', ' + persInf.getSurname()}">VALUE</p>
+            <p th:text="${'Name: ' + persInf.getName()}">VALUE</p>
+            <p th:text="${'Surame: ' + persInf.getSurname()}">VALUE</p>
+            <p th:text="${'Year of Birth: ' + persInf.getBirthYear()}">VALUE</p>
+            <p th:text="${'Phone Number: ' + persInf.getPhoneNumber()}">VALUE</p>
+            <p th:text="${'Email: ' + persInf.getEmail()}">VALUE</p>
+
 
             <div th:if="${profInf.isEmpty()}">
                 <p style="color: red">The person hasn't any skills yet</p>
@@ -31,9 +36,8 @@
             </div>
 
             <div th:if="${!profInf.isEmpty()}">
-                <hr/>
                 <b>Provided Skills:</b>
-                <br/>
+                <hr/>
                 <table th:each="skill : ${profInf}">
                     <tr>
                         <td>

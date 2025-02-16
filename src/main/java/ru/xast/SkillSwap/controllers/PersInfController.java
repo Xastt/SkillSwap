@@ -37,8 +37,18 @@ public class PersInfController {
 
     @GetMapping("/{id}")
     public String show(@PathVariable("id") UUID id, Model model) {
+
+        Users currentUser = userDetailsService.getCurrentUser();
+
+        PersInf existingPersInf = persInfService.findOne(id);
+
+        if (!existingPersInf.getUser().getId().equals(currentUser.getId())) {
+            return "redirect:/error/mismatchid"; // Перенаправление на страницу ошибки
+        }
+
         model.addAttribute("persInf", persInfService.findOne(id));
         model.addAttribute("profInf", persInfService.getSkillsByPersonId(id));
+
         return "persInf/show";
     }
 
@@ -66,14 +76,7 @@ public class PersInfController {
     @GetMapping("/{id}/edit")
     public String edit(Model model, @PathVariable("id") UUID id) {
 
-        Users currentUser = userDetailsService.getCurrentUser();
-
         PersInf existingPersInf = persInfService.findOne(id);
-
-        // Проверяем совпадение user_id
-        if (!existingPersInf.getUser().getId().equals(currentUser.getId())) {
-            return "redirect:/error/mismatchid"; // Перенаправление на страницу ошибки
-        }
 
         model.addAttribute("persInf", existingPersInf);
         return "persInf/edit";
@@ -85,6 +88,10 @@ public class PersInfController {
         if (bindingResult.hasErrors()) {
             return "persInf/edit";
         }
+
+        Users user = userDetailsService.getCurrentUser();
+
+        persInf.setUser(user);
 
         persInfService.update(id, persInf);
         return "redirect:/persInf";
@@ -98,9 +105,7 @@ public class PersInfController {
 
         PersInf existingPersInf = persInfService.findOne(id);
 
-        // Проверяем совпадение user_id
         if (!existingPersInf.getUser().getId().equals(currentUser.getId())) {
-            // Обработка случая, когда идентификаторы не совпадают, можно выкинуть исключение
             return "redirect:/error/mismatchid";
         }
 
@@ -119,4 +124,5 @@ public class PersInfController {
         model.addAttribute("persInf", persInfService.searchBySurname(surname));
         return "persInf/search";
     }
+
 }

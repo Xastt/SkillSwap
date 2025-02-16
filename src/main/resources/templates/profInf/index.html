@@ -3,7 +3,7 @@
 <head>
     <link rel="stylesheet" th:href="@{/css/styles.css}">
     <meta charset="UTF-8">
-    <title>Index</title>
+    <title>Skills Page</title>
     <style>
         form{
             max-width: 0px;
@@ -25,6 +25,7 @@
                 <li><a href="/persInf">Person Page</a></li>
                 <li><a href="/profInf/new">Provide New Skill</a></li>
                 <li><a href="/profInf/search">Find Skill</a></li>
+                <li><a href="/persInf/search">Find Person</a></li>
             </ul>
         </nav>
         <h1>SkillSwap</h1>
@@ -41,7 +42,7 @@
     </ul>
 
     <ul>
-        <h1>Skills list:</h1>
+        <h1>Choose the needed skill:</h1>
         <div class = "for-list">
             <p th:each="skill : ${profInf}">
                 <a th:href="@{/profInf/{id}(id=${skill.getId()})}"
