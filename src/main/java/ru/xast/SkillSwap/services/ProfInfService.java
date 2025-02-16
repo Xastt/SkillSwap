@@ -59,4 +59,8 @@ public class ProfInfService {
             throw new EntityNotFoundException("Personal information not found for ID: " + persInfId);
         }
     }
+
+    public List<ProfInf> searchBySkillName(String skillName) {
+        return profInfRepository.findBySkillNameStartingWith(skillName);
+    }
 }

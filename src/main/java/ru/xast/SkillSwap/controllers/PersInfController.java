@@ -31,13 +31,14 @@ public class PersInfController {
 
     @GetMapping()
     public String index(Model model){
-        model.addAttribute("profInf", profInfService.findAll());
+        model.addAttribute("persInf", persInfService.findAll());
         return "persInf/index";
     }
 
     @GetMapping("/{id}")
     public String show(@PathVariable("id") UUID id, Model model) {
         model.addAttribute("persInf", persInfService.findOne(id));
+        model.addAttribute("profInf", persInfService.getSkillsByPersonId(id));
         return "persInf/show";
     }
 
@@ -108,5 +109,14 @@ public class PersInfController {
         return "redirect:/persInf";
     }
 
+    @GetMapping("/search")
+    public String searchPage(){
+        return "persInf/search";
+    }
 
+    @PostMapping("/search")
+    public String makeSearch(Model model, @RequestParam("surname") String surname){
+        model.addAttribute("persInf", persInfService.searchBySurname(surname));
+        return "persInf/search";
+    }
 }

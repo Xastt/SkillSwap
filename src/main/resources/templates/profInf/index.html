@@ -22,21 +22,22 @@
     <header>
         <nav class="clear">
             <ul>
-                <li><a href="/persInf/new">Registration</a></li>
-                <li><a href="">Find Skill</a></li>
-                <li><a href="">Provide Skill</a></li>
+                <li><a href="/persInf">Person Page</a></li>
+                <li><a href="/profInf/new">Provide New Skill</a></li>
+                <li><a href="/profInf/search">Find Skill</a></li>
             </ul>
         </nav>
         <h1>SkillSwap</h1>
     </header>
 
     <ul>
-        <h1>Welcome to the App SkillSwap</h1>
-        <div class = "for-list">
-            <p>Our app will help you easily find or offer the necessary skills!</p>
-            <p>Make sure that you are entered your personal information on the
-                platform to continue enjoying all the benefits of this technology.</p>
-        </div>
+        <table>
+            <tr>
+                <td><form th:action="@{/logout}" th:method="POST">
+                    <input type = "submit" value = "Logout"/>
+                </form></td>
+            </tr>
+        </table>
     </ul>
 
     <ul>

@@ -1,12 +1,16 @@
 package ru.xast.SkillSwap.services;
 
+import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.xast.SkillSwap.models.PersInf;
+import ru.xast.SkillSwap.models.ProfInf;
 import ru.xast.SkillSwap.repositories.PersInfRepository;
 
+import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -46,5 +50,25 @@ public class PersInfService {
 
     public void delete(UUID id) {
         persInfRepository.deleteById(id);
+    }
+
+    public List<PersInf> searchBySurname(String surname) {
+        return persInfRepository.findBySurnameStartingWith(surname);
+    }
+
+    public Optional<PersInf> getPersonBySurName(String surName) {
+        return persInfRepository.findBySurname(surName);
+    }
+
+    public List<ProfInf> getSkillsByPersonId(UUID personId) {
+
+        Optional<PersInf> persInf = persInfRepository.findById(personId);
+
+        if(persInf.isPresent()) {
+            Hibernate.initialize(persInf.get().getProvidedSkills());
+            return persInf.get().getProvidedSkills();
+        }else{
+            return Collections.emptyList();
+        }
     }
 }

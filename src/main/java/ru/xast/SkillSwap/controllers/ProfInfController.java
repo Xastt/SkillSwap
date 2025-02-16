@@ -114,5 +114,16 @@ public class ProfInfController {
         return "redirect:/profInf";
     }
 
+    @GetMapping("/search")
+    public String searchPage(){
+        return "profInf/search";
+    }
+
+    @PostMapping("/search")
+    public String makeSearch(Model model, @RequestParam("skillName") String skillName){
+        model.addAttribute("profInf", profInfService.searchBySkillName(skillName));
+        return "profInf/search";
+    }
+
 
 }

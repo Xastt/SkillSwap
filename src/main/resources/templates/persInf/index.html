@@ -23,19 +23,19 @@
         <nav class="clear">
             <ul>
                 <li><a href="/profInf/new">Provide Skill</a></li>
-                <li><a href="/">Find Skill</a></li>
-                <!--<li><a href="/profInf/new">Log Out</a></li> Лог аут(если нужен)-->
+                <li><a href="/persInf/search">Find Person</a></li>
+                <li><a href="/profInf/search">Find Skill</a></li>
             </ul>
         </nav>
         <h1>SkillSwap</h1>
     </header>
 
     <ul>
-        <h1>Наполнение страницы</h1>
         <div class = "for-list">
-            <p>-------------</p>
+            <p>Our app for skill exchange and finding online lessons is your perfect assistant
+                for learning and development. Here, you can not only acquire new knowledge
+                but also share your unique skills with others.</p>
         </div>
-        <!--Рассказать про важность навыков и обучения или еще что-то + слайды листаются-->
     </ul>
 
     <table>
@@ -47,11 +47,11 @@
     </table>
 
     <ul>
-        <h1>Skills list:</h1>
+        <h1>Persons list:</h1>
         <div class = "for-list">
-            <p th:each="skill : ${profInf}">
-                <a th:href="@{/profInf/{id}(id=${skill.getId()})}"
-                   th:text="${skill.getSkillName() + ', ' + skill.getCost()}">user</a>
+            <p th:each="person : ${persInf}">
+                <a th:href="@{/persInf/{id}(id=${person.getId()})}"
+                   th:text="${person.getName() + ', ' + person.getSurname()}">user</a>
             </p>
         </div>
     </ul>
