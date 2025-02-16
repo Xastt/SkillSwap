@@ -2,6 +2,7 @@ package ru.xast.SkillSwap.services;
 
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.xast.SkillSwap.models.ProfInf;
@@ -62,5 +63,13 @@ public class ProfInfService {
 
     public List<ProfInf> searchBySkillName(String skillName) {
         return profInfRepository.findBySkillNameStartingWith(skillName);
+    }
+
+    public List<PersInf> findAll(boolean sortByRating){
+        if(sortByRating){
+            return persInfRepository.findAll(Sort.by("rating"));
+        }else{
+            return persInfRepository.findAll();
+        }
     }
 }

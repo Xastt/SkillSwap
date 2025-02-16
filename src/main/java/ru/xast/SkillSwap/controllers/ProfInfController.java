@@ -31,14 +31,14 @@ public class ProfInfController {
     }
 
     @GetMapping()
-    public String index(Model model){
-        model.addAttribute("profInf", profInfService.findAll());
+    public String index(Model model,
+                        @RequestParam(value = "sort_by_rating", required = false) boolean sortByRating){
+        model.addAttribute("profInf", profInfService.findAll(sortByRating));
         return "profInf/index";
     }
 
     @GetMapping("/{id}")
     public String show(@PathVariable("id") UUID id, Model model) {
-
         model.addAttribute("profInf", profInfService.findOne(id));
         return "profInf/show";
     }
@@ -127,6 +127,5 @@ public class ProfInfController {
         model.addAttribute("profInf", profInfService.searchBySkillName(skillName));
         return "profInf/search";
     }
-
 
 }

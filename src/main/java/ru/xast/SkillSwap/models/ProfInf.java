@@ -51,6 +51,13 @@ public class ProfInf {
     @Column(name = "rating")
     private Double rating;
 
+    @PrePersist
+    public void prePersist() {
+        if (this.rating == null) {
+            this.rating = 0.0;
+        }
+    }
+
     public ProfInf() {}
 
     public ProfInf(PersInf pers, Users user, String skillName, Double cost, String skillDescription, String persDescription, Double exp) {

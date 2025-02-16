@@ -53,7 +53,7 @@
         <div class = "for-list">
             <p th:each="person : ${persInf}">
                 <a th:href="@{/persInf/{id}(id=${person.getId()})}"
-                   th:text="${person.getName() + ', ' + person.getSurname()}">user</a>
+                   th:text="${person.getName() + ' ' + person.getSurname()}">user</a>
             </p>
         </div>
     </ul>
