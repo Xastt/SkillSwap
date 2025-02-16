@@ -9,6 +9,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import ru.xast.SkillSwap.security.CustomAuthSuccessHandler;
 import ru.xast.SkillSwap.services.UsersDetailsService;
 
 @Configuration
@@ -16,9 +17,11 @@ import ru.xast.SkillSwap.services.UsersDetailsService;
 public class SecurityConfig{
 
     private final UsersDetailsService usersDetailsService;
+    private final CustomAuthSuccessHandler customAuthSuccessHandler;
 
-    public SecurityConfig(UsersDetailsService usersDetailsService) {
+    public SecurityConfig(UsersDetailsService usersDetailsService, CustomAuthSuccessHandler customAuthSuccessHandler) {
         this.usersDetailsService = usersDetailsService;
+        this.customAuthSuccessHandler = customAuthSuccessHandler;
     }
 
     @Bean
@@ -33,7 +36,8 @@ public class SecurityConfig{
                 .formLogin(form -> form
                         .loginPage("/auth/login")
                         .loginProcessingUrl("/process_login")
-                        .defaultSuccessUrl("/persInf/new", true)//поменять на persInf
+                        .successHandler(customAuthSuccessHandler)
+                        //.defaultSuccessUrl("/persInf/new", true)//поменять на persInf
                         .failureUrl("/auth/login?error")
                 )
                 .build();
