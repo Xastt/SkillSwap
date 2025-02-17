@@ -45,5 +45,21 @@
 
   ![фото](img/SequenceDiagram.png)
 
+---
 
+### Использованные технологии:
+1. Java 
+2. Spring
+3. Spring Boot 
+4. Spring Security 
+5. Spring Validator
+6. Spring Data
+7. Spring Mail
+8. Kafka(v2.0)
+9. Docker(v3.0)
+10. Hibernate
+11. PostgreSQL
+12. Flyway
+13. HTML, CSS, Thymeleaf
+14. Maven
 ---
