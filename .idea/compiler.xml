@@ -6,7 +6,6 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="SkillSwap" />
       </profile>
       <profile name="Annotation profile for SkillSwapMailSender" enabled="true">
         <sourceOutputDir name="target/generated-sources/annotations" />
@@ -16,6 +15,15 @@
           <entry name="$MAVEN_REPOSITORY$/org/projectlombok/lombok/unknown/lombok-unknown.jar" />
         </processorPath>
         <module name="SkillSwapMailSender" />
+      </profile>
+      <profile name="Annotation profile for SkillSwap" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <processorPath useClasspath="false">
+          <entry name="$MAVEN_REPOSITORY$/org/projectlombok/lombok/1.18.26/lombok-1.18.26.jar" />
+        </processorPath>
+        <module name="SkillSwap" />
       </profile>
     </annotationProcessing>
   </component>
