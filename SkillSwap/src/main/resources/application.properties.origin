@@ -1,0 +1,14 @@
+#DATABASE
+spring.datasource.driverClassName=
+spring.datasource.url=
+spring.datasource.username=
+spring.datasource.password=
+#HIBERNATE
+spring.jpa.properties.hibernate.dialect=
+spring.jpa.properties.hibernate.show_sql=
+#KAFKA
+spring.kafka.bootstrap-servers=
+spring.kafka.producer.key-serializer=
+spring.kafka.producer.value-serializer=
+spring.kafka.producer.acks=
+spring.kafka.producer.retries=
