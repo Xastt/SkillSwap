@@ -1,0 +1,64 @@
+@startuml
+left to right direction
+actor Пользователь as user
+
+    usecase "Добавить личную информацию" as indINf
+    usecase "Изменить личную информацию" as indChg
+    usecase "Найти навык" as fSkill
+    usecase  "Предоставить услуги" as Usl
+
+    usecase "Добавить номер телефона" as addPhone
+    usecase "Добавить ФИО" as addFIO
+    usecase "Добавить email" as addEmail
+
+    usecase "Изменить номер телефона" as chgPhone
+    usecase "Изменить ФИО" as chgFIO
+    usecase "Изменить email" as chgEmail
+
+    usecase "Добавить информацию" as addProfInf
+
+    usecase "Добавить навык" as addSkill
+    usecase "Добавить опыт" as addPro
+
+    usecase "Изменить информацию" as chgProfInf
+
+    usecase "Изменить навык" as chgSkill
+    usecase "Изменить опыт" as chgPro
+
+    usecase "Оценить услуги" as revSk
+    usecase "Поставить оценку" as setMark
+    usecase "Оставить комментарий" as leftComm
+
+user --> indINf
+user--> indChg
+user --> fSkill
+user --> Usl
+user --> revSk
+
+indINf <-- Система
+indChg <-- Система
+fSkill <-- Система
+Usl <-- Система
+revSk <-- Система
+
+indINf <. addPhone : <<include>>
+indINf <.. addFIO : <<include>>
+indINf <.. addEmail : <<include>>
+
+indChg <. chgPhone : <<include>>
+indChg <.. chgFIO : <<include>>
+indChg <.. chgEmail : <<include>>
+
+Usl <.. addProfInf : <<include>>
+Usl <.. chgProfInf : <<include>>
+
+addProfInf <. addSkill : <<include>>
+addProfInf <.. addPro : <<include>>
+
+chgProfInf <. chgSkill : <<include>>
+chgProfInf <.. chgPro : <<include>>
+
+revSk <. setMark : <<include>>
+revSk <. leftComm : <<include>>
+
+@enduml

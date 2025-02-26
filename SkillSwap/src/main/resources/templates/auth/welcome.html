@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+    <meta charset="UTF-8">
+    <title>Index</title>
+    <style>
+        form{
+            max-width: 0px;
+            background: none;
+            padding: 2px;
+            margin-left: 0;
+            box-shadow: 0 0 0px rgba(0, 0, 0, 0.1);
+        }
+        td{
+            width: 80px;
+        }
+    </style>
+</head>
+<body>
+<article>
+    <header>
+        <nav class="clear">
+            <ul>
+                <li><a href="/auth/registration">Registration</a></li>
+                <li><a href="/auth/login">Log IN</a></li>
+            </ul>
+        </nav>
+        <h1>SkillSwap</h1>
+    </header>
+
+    <ul>
+        <h1>Welcome to the App SkillSwap</h1>
+        <div class = "for-list">
+            <p>Our app will help you easily find or offer the necessary skills!</p>
+            <p>Make sure that you are entered your personal information on the
+                platform to continue enjoying all the benefits of this technology.</p>
+            <p>To access all personal information, please complete the initial registration process</p>
+            <h1>Here's what I can offer:</h1>
+        </div>
+    </ul>
+
+    <ul>
+        <div class = "for-list">
+            <p th:each="skill : ${profInf}">
+                <a th:href="@{/profInf/{id}(id=${skill.getId()})}"
+                   th:text="${skill.getSkillName() + ', ' + skill.getCost()}">user</a>
+            </p>
+        </div>
+    </ul>
+
+</article>
+</body>
+</html>

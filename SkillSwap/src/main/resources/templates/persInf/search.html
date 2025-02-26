@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+    <meta charset="UTF-8">
+    <title>Find Person</title>
+</head>
+<body>
+
+<article>
+
+    <header>
+        <nav class="clear">
+            <ul>
+                <li><a href = "/persInf">Person page</a></li>
+                <li><a href = "/profInf">Skills page</a></li>
+            </ul>
+        </nav>
+        <h1>SkillSwap</h1>
+    </header>
+
+    <ul>
+
+        <h1>Search the Person:</h1>
+
+
+        <form th:method="POST" th:action="@{/persInf/search}">
+            <label for="surname">Enter search term: </label>
+            <input type="text" id="surname" name="surname"/>
+            <br/>
+            <input type="submit" value="Search!"/>
+        </form>
+
+        <div th:if="${persInf}">
+            <div th:if="${persInf.isEmpty()}">
+                <span style="color: red">No person found</span>
+            </div>
+
+            <div class = "for-list">
+                <p th:each="person : ${persInf}">
+                    <a th:href="@{/persInf/{id}(id=${person.getId()})}"
+                       th:text="${person.getName() + ', ' + person.getSurname()}">user</a>
+                </p>
+            </div>
+        </div>
+    </ul>
+</article>
+
+
+</body>
+</html>

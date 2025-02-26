@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+    <meta charset="UTF-8">
+    <title>Login page</title>
+</head>
+<body>
+<article>
+
+    <header>
+        <nav class="clear">
+            <ul>
+                <li><a>First time on our site? -> </a></li>
+                <li><a href = "/auth/registration">Registration</a></li>
+            </ul>
+        </nav>
+        <h1>SkillSwap</h1>
+    </header>
+    <ul>
+
+        <h1>Please Log In:</h1>
+
+
+        <form name="f" method="post" action="/process_login">
+            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+
+            <label for="username">Enter your username: </label>
+            <input type="text" name="username" id="username"/>
+            <br/>
+            <label for="password">Enter the password: </label>
+            <input type="password" name="password" id="password"/>
+            <br/>
+            <input type="submit" value="Login"/>
+
+            <div th:if="${param.error}" style="color: red">
+                Incorrect password or username!
+            </div>
+
+        </form>
+    </ul>
+</article>
+</body>
+</html>

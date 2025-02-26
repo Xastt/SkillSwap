@@ -1,0 +1,10 @@
+spring.application.name =
+
+spring.mail.host =
+spring.mail.port =
+spring.mail.username =
+spring.mail.password =
+spring.mail.properties.mail.smtp.auth =
+spring.mail.properties.mail.smtp.starttls.enable =
+
+server.port =

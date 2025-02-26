@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <link rel="stylesheet" th:href="@{/css/styles_show.css}">
+    <meta charset="UTF-8">
+    <title>Update Skill</title>
+</head>
+<body>
+
+<article>
+    <div class="content-wrapper">
+        <header>
+            <nav class="clear">
+                <ul>
+                    <li><a href="/persInf">Person page</a></li>
+                    <li><a href="/profInf">Skill page</a></li>
+                    <li><a href="/profInf/new">New Skill</a></li>
+                </ul>
+            </nav>
+            <h1>Skill Swap</h1>
+        </header>
+    </div>
+    <ul>
+        <div class="container">
+            <h1 class = "inf">Skill information:</h1>
+            <hr>
+            <p th:text="${'Skill Name: '+profInf.getSkillName()}">VALUE</p>
+            <p th:text = "${'Cost: '+ profInf.getCost() + ' Rub.'}">VALUE</p>
+            <p th:text = "${'Rating: ' + profInf.getRating()}">VALUE</p>
+            <p th:text = "${'Skill Description: ' + profInf.getSkillDescription()}">VALUE</p>
+            <p th:text = "${'Personal Description: ' + profInf.getPersDescription()}">VALUE</p>
+            <p th:text = "${'Experience: ' + profInf.getExp()}">VALUE</p>
+
+            <form th:method="GET" th:action="@{/profInf/{id}/edit(id=${profInf.getId()})}">
+                <input class = "input-btn" type="submit" value="Edit"/>
+            </form>
+
+            <!--<form th:method="DELETE" th:action="@{/profInf/{id}(id=${profInf.getId()})}">
+                <input class = "input-btn" type="submit" value="Delete"/>
+            </form>-->
+
+        </div>
+    </ul>
+</article>
+
+</body>
+</html>

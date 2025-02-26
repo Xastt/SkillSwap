@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+    <meta charset="UTF-8">
+    <title>New Skill</title>
+</head>
+<body>
+
+<article>
+
+    <header>
+        <nav class="clear">
+            <ul>
+                <li><a href="/persInf">Person page</a></li>
+                <li><a href="/profInf">Skills page</a></li>
+            </ul>
+        </nav>
+        <h1>SkillSwap</h1>
+    </header>
+
+    <ul>
+
+        <h1>New service:</h1>
+
+        <form th:method="POST" th:action="@{/profInf}" th:object="${profInf}">
+            <label for="skillName">Enter the name: </label>
+            <input type="text" th:field="*{skillName}" id="skillName"/>
+            <div style="color: red" th:if="${#fields.hasErrors('skillName')}" th:errors="*{skillName}">SkillName Error</div>
+            <br/>
+            <label for="cost">Enter the cost: </label>
+            <input type="text" th:field="*{cost}" id="cost"/>
+            <div style="color: red" th:if="${#fields.hasErrors('cost')}" th:errors="*{cost}">Cost Error</div>
+            <br/>
+            <label for="skillDescription">Enter the service description: </label>
+            <input type="text" th:field="*{skillDescription}" id="skillDescription"/>
+            <div style="color: red" th:if="${#fields.hasErrors('skillDescription')}" th:errors="*{skillDescription}">SkillDescription Error</div>
+            <br/>
+            <label for="persDescription">Tell about your professional skills: </label>
+            <input type="text" th:field="*{persDescription}" id="persDescription"/>
+            <div style="color: red" th:if="${#fields.hasErrors('persDescription')}" th:errors="*{persDescription}">PersDescription Error</div>
+            <br/>
+            <label for="exp">Enter your length of service: </label>
+            <input type="text" th:field="*{exp}" id="exp"/>
+            <div style="color: red" th:if="${#fields.hasErrors('exp')}" th:errors="*{exp}">Exp Error</div>
+            <br/>
+            <input type="submit" value="Create!"/>
+        </form>
+    </ul>
+</article>
+
+</body>
+</html>

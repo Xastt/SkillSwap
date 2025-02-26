@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+    <meta charset="UTF-8">
+    <title>Index</title>
+    <style>
+        form{
+            max-width: 0px;
+            background: none;
+            padding: 2px;
+            margin-left: 0;
+            box-shadow: 0 0 0px rgba(0, 0, 0, 0.1);
+        }
+        td{
+            width: 80px;
+        }
+    </style>
+</head>
+<body>
+<article>
+    <header>
+        <nav class="clear">
+            <ul>
+                <li><a href = "/profInf">Skills Page</a></li>
+                <li><a href="/profInf/new">Provide Skill</a></li>
+                <li><a href="/profInf/search">Find Skill</a></li>
+                <!--<li><a href="/persInf/search">Find Person</a></li>-->
+
+            </ul>
+        </nav>
+        <h1>SkillSwap</h1>
+    </header>
+
+    <table>
+        <tr>
+            <td><form th:action="@{/logout}" th:method="POST">
+                <input type = "submit" value = "Logout"/>
+            </form></td>
+        </tr>
+    </table>
+
+    <ul>
+        <div class = "for-list">
+            <p>Our app for skill exchange and finding online lessons is your perfect assistant
+                for learning and development. Here, you can not only acquire new knowledge
+                but also share your unique skills with others.</p>
+        </div>
+    </ul>
+
+    <ul>
+        <h1>Persons list:</h1>
+        <div class = "for-list">
+            <p th:each="person : ${persInf}">
+                <a th:href="@{/persInf/{id}(id=${person.getId()})}"
+                   th:text="${person.getName() + ' ' + person.getSurname()}">user</a>
+            </p>
+        </div>
+    </ul>
+
+</article>
+</body>
+</html>

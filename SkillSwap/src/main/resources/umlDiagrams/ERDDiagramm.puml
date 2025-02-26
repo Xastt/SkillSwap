@@ -1,0 +1,54 @@
+@startuml
+
+entity PersInf {
+    +id: int
+    +Surname: varchar(40)
+    +Name: varchar(40)
+    +birthYear: int
+    +phoneNumber: varchar(40)
+    +email: varchar(40)
+}
+
+entity ProfInf {
+    +id: int
+    +PersId: int FK(PersInf(id))
+    +skillName: varchar(40)
+    +skillDescription: varchar
+    +cost: numeric(6,2)
+    +persDescription: varchar
+    +exp: int
+}
+
+entity SkillExchange{
+    +exchangeId: String
+    +skillOffered: varchar FK(ProfInf(skillName))
+    +userOffering: int FK(ProfInf(PersInfId))
+    +userRequesting: int FK(PersInf(id))
+}
+
+entity Review {
+    +reviewId: serial
+    +rating: int
+    +comment: varchar
+    +reviewer: int FK(PersInf(id))
+    +userEvaluated: int FK(ProfInf(id))
+}
+
+entity Transaction {
+    +transactionId: String
+    +dateTime: DateTime
+    +status: varchar(30)
+    +changeId: int FK(SkillExchange(exchangeId))
+}
+
+
+
+PersInf ||--o{ ProfInf : "OneToMany"
+SkillExchange ||--|| PersInf : "OneToOne"
+SkillExchange ||--|| ProfInf : "OneToOne"
+SkillExchange ||--|| ProfInf : "OneToOne"
+Review ||--|| ProfInf : "OneToOne"
+Review ||--|| PersInf : "OneToOne"
+Transaction ||--|| SkillExchange : "OneToOne"
+
+@enduml

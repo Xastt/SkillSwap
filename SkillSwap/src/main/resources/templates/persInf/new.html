@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+    <meta charset="UTF-8">
+    <title>New Person</title>
+</head>
+<body>
+
+<article>
+
+    <header>
+        <nav class="clear">
+            <ul>
+                <li><a href="/persInf">Person page</a></li>
+                <li><a href="/profInf">Skills page</a></li>
+            </ul>
+        </nav>
+        <h1>SkillSwap</h1>
+    </header>
+
+    <ul>
+        <h1>Let's get to know each other:</h1>
+
+        <form th:method="POST" th:action="@{/persInf}" th:object="${persInf}">
+            <label for="name">Enter your name: </label>
+            <input type="text" th:field="*{name}" id="name"/>
+            <div style="color: red" th:if="${#fields.hasErrors('name')}" th:errors="*{name}">Name Error</div>
+            <br/>
+            <label for="surname">Enter your surname: </label>
+            <input type="text" th:field="*{surname}" id="surname"/>
+            <div style="color: red" th:if="${#fields.hasErrors('surname')}" th:errors="*{surname}">Surname Error</div>
+            <br/>
+            <label for="birthYear">Enter the year of birth: </label>
+            <input type="text" th:field="*{birthYear}" id="birthYear"/>
+            <div style="color: red" th:if="${#fields.hasErrors('birthYear')}" th:errors="*{birthYear}">Age Error</div>
+            <br/>
+            <label for="phoneNumber">Enter your Phone Number: </label>
+            <input type="text" th:field="*{phoneNumber}" id="phoneNumber"/>
+            <div style="color: red" th:if="${#fields.hasErrors('phoneNumber')}" th:errors="*{phoneNumber}">PhoneNumber Error</div>
+            <br/>
+            <label for="email">Enter your email: </label>
+            <input type="text" th:field="*{email}" id="email"/>
+            <div style="color: red" th:if="${#fields.hasErrors('email')}" th:errors="*{email}">Email Error</div>
+            <br/>
+            <input type="submit" value="Create!"/>
+        </form>
+    </ul>
+</article>
+
+</body>
+</html>

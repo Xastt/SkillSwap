@@ -1,0 +1,57 @@
+@startuml
+
+class PersInf {
+    -id: String
+    -Surname: String
+    -Name: String
+    -DataBorn: int
+    -phoneNumber: String
+    -email: String
+}
+
+class ProfInf {
+    -id: String
+    -pers_Id: String
+    -skillName: String
+    -skillDescription: String
+    -cost: Double
+    -persDescription: String
+    -exp: double
+    -rating: double
+}
+
+class SkillExchange {
+    -exchangeId: String
+    -skillOffered: ProfInf
+    -userOffering: PersInf
+    -userRequesting: PersInf
+}
+
+class Review {
+    -reviewId: String
+    -rating: double
+    -comment: String
+    -reviewer: String
+    -userEvaluated: String
+}
+
+class Transaction {
+    -transactionId: String
+    -date: Date
+    -status: Status
+    -changeId: String
+}
+
+enum Status {
+    COMPLETED
+    IN PROCESS
+    CANCELED
+}
+
+PersInf <-- ProfInf
+SkillExchange --> PersInf
+Review --> PersInf
+Transaction --> PersInf
+Transaction --> Status
+
+@enduml
