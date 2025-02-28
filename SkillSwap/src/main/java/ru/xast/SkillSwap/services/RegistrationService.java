@@ -26,7 +26,7 @@ public class RegistrationService {
         String encodedPassword = passwordEncoder.encode(users.getPassword());
         users.setPassword(encodedPassword);
         users.setRole("ROLE_USER");
-        kafkaProducerService.send("Topic", users.getUsername());
+        //kafkaProducerService.send(users.getUsername());
         usersRepository.save(users);
     }
 }

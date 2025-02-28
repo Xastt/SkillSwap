@@ -1,10 +1,15 @@
-spring.application.name =
-
-spring.mail.host =
+#SPRING_MAIL
+spring.mail.host=
 spring.mail.port =
-spring.mail.username =
-spring.mail.password =
+spring.mail.username=
+spring.mail.password=
 spring.mail.properties.mail.smtp.auth =
 spring.mail.properties.mail.smtp.starttls.enable =
+#KAFKA
+spring.kafka.bootstrap-servers=
+spring.kafka.consumer.group-id=
+spring.kafka.consumer.auto-offset-reset=
+spring.kafka.consumer.key-deserializer=
+spring.kafka.consumer.value-deserializer=
 
-server.port =
+

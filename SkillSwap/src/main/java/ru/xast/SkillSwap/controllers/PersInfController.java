@@ -8,6 +8,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import ru.xast.SkillSwap.models.PersInf;
 import ru.xast.SkillSwap.models.Users;
+import ru.xast.SkillSwap.services.KafkaProducerService;
 import ru.xast.SkillSwap.services.PersInfService;
 import ru.xast.SkillSwap.services.ProfInfService;
 import ru.xast.SkillSwap.services.UsersDetailsService;
@@ -17,14 +18,14 @@ import java.util.UUID;
 @RequestMapping("/persInf")
 public class PersInfController {
 
+    private final KafkaProducerService kafkaProducerService;
     private final PersInfService persInfService;
-    private final ProfInfService profInfService;
     private final UsersDetailsService userDetailsService;
 
     @Autowired
-    public PersInfController(PersInfService persInfService, ProfInfService profInfService, UsersDetailsService userDetailsService) {
+    public PersInfController(KafkaProducerService kafkaProducerService, PersInfService persInfService, UsersDetailsService userDetailsService) {
+        this.kafkaProducerService = kafkaProducerService;
         this.persInfService = persInfService;
-        this.profInfService = profInfService;
 
         this.userDetailsService = userDetailsService;
     }
@@ -43,7 +44,7 @@ public class PersInfController {
         PersInf existingPersInf = persInfService.findOne(id);
 
         if (!existingPersInf.getUser().getId().equals(currentUser.getId())) {
-            return "redirect:/error/mismatchid"; // Перенаправление на страницу ошибки
+            return "redirect:/error/mismatchid";
         }
 
         model.addAttribute("persInf", persInfService.findOne(id));
@@ -68,6 +69,7 @@ public class PersInfController {
 
         persInf.setUser(user);
 
+        kafkaProducerService.send(persInf.getEmail(), persInf.getName());
         persInfService.save(persInf);
         return "redirect:/persInf";
 
