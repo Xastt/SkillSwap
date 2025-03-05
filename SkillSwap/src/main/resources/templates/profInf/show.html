@@ -35,9 +35,11 @@
                 <input class = "input-btn" type="submit" value="Edit"/>
             </form>
 
-            <!--<form th:method="DELETE" th:action="@{/profInf/{id}(id=${profInf.getId()})}">
-                <input class = "input-btn" type="submit" value="Delete"/>
-            </form>-->
+            <form th:method = "GET" th:action="@{/skillExchange/{id}(id =${profInf.getPers().getId()})}">
+                <input class = "input-btn" type="submit" value="Get contacts"/>
+            </form>
+
+            <p></p>
 
         </div>
     </ul>

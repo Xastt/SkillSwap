@@ -1,50 +1,50 @@
 @startuml
 
 class PersInf {
-    -id: String
-    -Surname: String
-    -Name: String
-    -DataBorn: int
+    -id: UUID
+    -surname: String
+    -name: String
+    -birthYear: int
     -phoneNumber: String
     -email: String
 }
 
 class ProfInf {
-    -id: String
-    -pers_Id: String
+    -id: UUID
+    -pers_Id: PersInf
     -skillName: String
     -skillDescription: String
     -cost: Double
     -persDescription: String
-    -exp: double
-    -rating: double
+    -exp: Double
+    -rating: Double
 }
 
 class SkillExchange {
-    -exchangeId: String
-    -skillOffered: ProfInf
-    -userOffering: PersInf
-    -userRequesting: PersInf
+    -exchangeId: UUID
+    -skillOffered: String
+    -userOffering: UUID
+    -userRequesting: UUID
 }
 
 class Review {
-    -reviewId: String
+    -reviewId: UUID
     -rating: double
     -comment: String
-    -reviewer: String
-    -userEvaluated: String
+    -reviewer: UUID
+    -userEvaluated: UUID
 }
 
 class Transaction {
-    -transactionId: String
+    -transactionId: UUID
     -date: Date
     -status: Status
-    -changeId: String
+    -changeId: SkillExchange
 }
 
 enum Status {
-    COMPLETED
-    IN PROCESS
+    SUCCESS
+    IN_PROCESS
     CANCELED
 }
 

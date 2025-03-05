@@ -34,7 +34,11 @@ public class ProfInfService {
     @Transactional(readOnly = true)
     public ProfInf findOne(UUID id){
         return profInfRepository.findById(id).orElse(null);
+    }
 
+    @Transactional(readOnly = true)
+    public ProfInf findProfInfByUserId(UUID userId) {
+        return profInfRepository.findProfInfByUserId(userId);
     }
 
     @Transactional(readOnly = true)

@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <link rel="stylesheet" th:href="@{/css/styles_show.css}">
+    <meta charset="UTF-8">
+    <title>Show Person</title>
+</head>
+<body>
+
+<article>
+    <div class="content-wrapper">
+        <header>
+            <nav class="clear">
+                <ul>
+                    <li><a href="/persInf">Person page</a></li>
+                    <li><a href="/profInf">Skills page</a></li>
+                </ul>
+            </nav>
+            <h1>SkillSwap</h1>
+        </header>
+    </div>
+    <ul>
+        <div class="container">
+            <h1 class = "inf">Person information:</h1>
+
+            <p th:text="${'Name: ' + persInf.getName()}">VALUE</p>
+            <p th:text="${'Surame: ' + persInf.getSurname()}">VALUE</p>
+            <p th:text="${'Year of Birth: ' + persInf.getBirthYear()}">VALUE</p>
+            <p th:text="${'Phone Number: ' + persInf.getPhoneNumber()}">VALUE</p>
+            <p th:text="${'Email: ' + persInf.getEmail()}">VALUE</p>
+
+            <p>Were you able to communicate?</p>
+            <form th:method="POST" th:action="@{/skillExchange/{id}/success(id=${persInf.getId()})}">
+                <input class = "input-btn" type="submit" value="Yes"/>
+            </form>
+
+            <!--<form th:method="POST" th:action="@{/skillExchange/{id}/cancel(id=${persInf.getId()})}">
+                <input class = "input-btn" type="submit" value="No"/>
+            </form>-->
+
+            <form th:method = "GET" th:action="@{/skillExchange/{id}/cancel(id=${persInf.getId()})}">
+            <input class = "input-btn" type="submit" value="Get contacts"/>
+            </form>
+
+
+        </div>
+    </ul>
+</article>
+
+</body>
+</html>
