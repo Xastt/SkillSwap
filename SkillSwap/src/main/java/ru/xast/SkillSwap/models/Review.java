@@ -1,6 +1,8 @@
 package ru.xast.SkillSwap.models;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
@@ -20,7 +22,8 @@ public class Review {
     private UUID reviewid;
 
     @Column(name = "rating")
-    @Size(min = 1, max = 5, message = "Your rating should be between 1 and 5!")
+    @Min(value = 0, message = "Your rating should be between 1 and 5!")
+    @Max(value = 5, message = "Your rating should be between 1 and 5!")
     private Double rating;
 
     @Column(name = "comment")

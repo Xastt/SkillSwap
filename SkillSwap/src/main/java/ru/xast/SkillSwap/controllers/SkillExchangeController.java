@@ -1,14 +1,13 @@
 package ru.xast.SkillSwap.controllers;
 
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.*;
 import ru.xast.SkillSwap.models.*;
 import ru.xast.SkillSwap.services.*;
 import ru.xast.SkillSwap.util.Status;
@@ -20,14 +19,16 @@ import java.util.UUID;
 public class SkillExchangeController {
 
     private final PersInfService persInfService;
+    private final ReviewService reviewService;
     private final UsersDetailsService usersDetailsService;
     private final ProfInfService profInfService;
     private final SkillExchangeService skillExchangeService;
     private final TransactionService transactionService;
 
     @Autowired
-    public SkillExchangeController(PersInfService persInfService, UsersDetailsService usersDetailsService, ProfInfService profInfService, SkillExchangeService skillExchangeService, TransactionService transactionService) {
+    public SkillExchangeController(PersInfService persInfService, ReviewService reviewService, UsersDetailsService usersDetailsService, ProfInfService profInfService, SkillExchangeService skillExchangeService, TransactionService transactionService) {
         this.persInfService = persInfService;
+        this.reviewService = reviewService;
         this.usersDetailsService = usersDetailsService;
         this.profInfService = profInfService;
         this.skillExchangeService = skillExchangeService;
@@ -61,12 +62,53 @@ public class SkillExchangeController {
     }
 
     @PostMapping("/{id}/success")
-    public String success(@PathVariable("id") UUID id){
+    public String success(@PathVariable("id") UUID id, Model model){
         Transaction transaction = transactionService.findByPersInfId(id);
         transaction.setStatus(Status.SUCCESS);
         transactionService.save(transaction);
 
+        model.addAttribute("review", new Review());
+        model.addAttribute("userEvaluatedId", id);
+
         return "skillExchange/review";
+    }
+
+    @GetMapping("/review")
+    public String review(@ModelAttribute("review") Review review, Model model) {
+        return "skillExchange/review";
+    }
+
+    @PostMapping("/review")
+    public String submitReview(@ModelAttribute("review") @Valid Review review, BindingResult bindingResult, Model model) {
+        if (bindingResult.hasErrors()) {
+            return "skillExchange/review";
+        }
+
+        Users user = usersDetailsService.getCurrentUser();
+        review.setReviewer(user.getId());
+
+        if (review.getUserEvaluated() == null) {
+            UUID userEvaluatedId = (UUID) model.getAttribute("userEvaluatedId");
+            review.setUserEvaluated(userEvaluatedId);
+        }
+
+        reviewService.save(review);
+
+        ProfInf profInf = profInfService.findProfInfByPersId(review.getUserEvaluated());
+
+        Double ratingBefore = profInf.getRating();
+
+        Double finalRating;
+        if (ratingBefore == null || ratingBefore == 0.0) {
+            finalRating = review.getRating();
+        } else {
+            finalRating = (ratingBefore + review.getRating()) / 2.0;
+        }
+
+        profInf.setRating(finalRating);
+        profInfService.save(profInf);
+
+        return "skillExchange/successDeal";
     }
 
     @GetMapping("/{id}/cancel")

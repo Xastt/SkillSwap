@@ -31,10 +31,20 @@
     </header>
 
     <ul>
-        <h1>Review</h1>
-        <div class = "for-list">
-            <p>REVIEW PAGE</p>
-        </div>
+        <h1>Leave a Review:</h1>
+
+        <form th:method="POST" th:action="@{/skillExchange/review}" th:object="${review}">
+            <input type="hidden" name = "userEvaluated" th:value="${userEvaluatedId}"/>
+            <label for="rating">Rating (1-5): </label>
+            <input type="number" th:field="*{rating}" id="rating" min="1" max="5"/>
+            <div style="color: red" th:if="${#fields.hasErrors('rating')}" th:errors="*{rating}">Rating Error</div>
+            <br/>
+            <label for="comment">Comment: </label>
+            <textarea th:field="*{comment}" id="comment"></textarea>
+            <div style="color: red" th:if="${#fields.hasErrors('comment')}" th:errors="*{comment}">Comment Error</div>
+            <br/>
+            <input type="submit" value="Submit Review"/>
+        </form>
     </ul>
 
 </article>

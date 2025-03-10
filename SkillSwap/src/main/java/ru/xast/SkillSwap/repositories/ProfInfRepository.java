@@ -12,4 +12,6 @@ public interface ProfInfRepository extends JpaRepository<ProfInf, UUID> {
     List<ProfInf> findBySkillNameStartingWith(String skillName);
 
     ProfInf findProfInfByUserId(UUID userId);
+
+    ProfInf findProfInfByPersId(UUID persId);
 }
