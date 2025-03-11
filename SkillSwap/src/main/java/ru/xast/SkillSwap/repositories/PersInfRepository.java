@@ -2,7 +2,6 @@ package ru.xast.SkillSwap.repositories;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import ru.xast.SkillSwap.models.PersInf;
-import ru.xast.SkillSwap.models.ProfInf;
 
 import java.util.List;
 import java.util.Optional;
