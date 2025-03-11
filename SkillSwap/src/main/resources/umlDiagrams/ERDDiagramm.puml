@@ -1,7 +1,7 @@
 @startuml
 
 entity PersInf {
-    +id: int
+    +id: UUID
     +Surname: varchar(40)
     +Name: varchar(40)
     +birthYear: int
@@ -10,32 +10,32 @@ entity PersInf {
 }
 
 entity ProfInf {
-    +id: int
+    +id: UUID
     +PersId: int FK(PersInf(id))
     +skillName: varchar(40)
     +skillDescription: varchar
     +cost: numeric(6,2)
     +persDescription: varchar
-    +exp: int
+    +exp: numeric(4,2)
 }
 
 entity SkillExchange{
-    +exchangeId: String
-    +skillOffered: varchar FK(ProfInf(skillName))
-    +userOffering: int FK(ProfInf(PersInfId))
-    +userRequesting: int FK(PersInf(id))
+    +exchangeId: UUID
+    +skillOffered: String
+    +userOffering: UUID
+    +userRequesting: UUID
 }
 
 entity Review {
-    +reviewId: serial
-    +rating: int
+    +reviewId: UUID
+    +rating: numeric(4,2)
     +comment: varchar
-    +reviewer: int FK(PersInf(id))
-    +userEvaluated: int FK(ProfInf(id))
+    +reviewer: UUID
+    +userEvaluated: UUID
 }
 
 entity Transaction {
-    +transactionId: String
+    +transactionId: UUID
     +dateTime: DateTime
     +status: varchar(30)
     +changeId: int FK(SkillExchange(exchangeId))
