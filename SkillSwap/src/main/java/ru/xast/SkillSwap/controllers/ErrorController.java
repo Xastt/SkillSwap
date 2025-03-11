@@ -12,4 +12,9 @@ public class ErrorController {
     public String mismatchId() {
         return "error/mismatchid";
     }
+
+    @GetMapping("/retry")
+    public String retry() {
+        return "error/retry";
+    }
 }

@@ -69,7 +69,7 @@ public class SkillExchangeController {
             skillExchangeService.save(skillExchange);
             transactionService.save(transaction);
 
-            //kafkaProducerService.sendConnectEmail(userOffering.getPers().getEmail(), userOffering.getPers().getName());
+            kafkaProducerService.sendConnectEmail(userOffering.getPers().getEmail(), userOffering.getPers().getName());
 
             return "skillExchange/showPersInf";
         }catch (Exception e) {
