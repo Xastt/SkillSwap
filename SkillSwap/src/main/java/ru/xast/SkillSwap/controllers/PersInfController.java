@@ -1,6 +1,7 @@
 package ru.xast.SkillSwap.controllers;
 
 import jakarta.validation.Valid;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -14,6 +15,7 @@ import ru.xast.SkillSwap.services.ProfInfService;
 import ru.xast.SkillSwap.services.UsersDetailsService;
 import java.util.UUID;
 
+@Slf4j
 @Controller
 @RequestMapping("/persInf")
 public class PersInfController {
@@ -32,25 +34,33 @@ public class PersInfController {
 
     @GetMapping()
     public String index(Model model){
-        model.addAttribute("persInf", persInfService.findAll());
-        return "persInf/index";
+        try {
+            model.addAttribute("persInf", persInfService.findAll());
+            return "persInf/index";
+        } catch (Exception e) {
+            log.error("Error loading persInf index page", e);
+            return "redirect:/error/retry";
+        }
     }
 
     @GetMapping("/{id}")
     public String show(@PathVariable("id") UUID id, Model model) {
 
-        Users currentUser = userDetailsService.getCurrentUser();
+        try {
+            Users currentUser = userDetailsService.getCurrentUser();
+            PersInf existingPersInf = persInfService.findOne(id);
 
-        PersInf existingPersInf = persInfService.findOne(id);
+            if (!existingPersInf.getUser().getId().equals(currentUser.getId())) {
+                return "redirect:/error/mismatchid";
+            }
 
-        if (!existingPersInf.getUser().getId().equals(currentUser.getId())) {
-            return "redirect:/error/mismatchid";
+            model.addAttribute("persInf", existingPersInf);
+            model.addAttribute("profInf", persInfService.getSkillsByPersonId(id));
+            return "persInf/show";
+        } catch (Exception e) {
+            log.error("Error loading persInf with id: {}", id, e);
+            return "redirect:/error/retry";
         }
-
-        model.addAttribute("persInf", persInfService.findOne(id));
-        model.addAttribute("profInf", persInfService.getSkillsByPersonId(id));
-
-        return "persInf/show";
     }
 
     @GetMapping("/new")
@@ -60,60 +70,70 @@ public class PersInfController {
 
     @PostMapping()
     public String create(@ModelAttribute("persInf") @Valid PersInf persInf, BindingResult bindingResult) {
+        try {
+            if (bindingResult.hasErrors()) {
+                return "persInf/new";
+            }
 
-        if (bindingResult.hasErrors()) {
-            return "persInf/new";
+            Users user = userDetailsService.getCurrentUser();
+            persInf.setUser(user);
+
+            //kafkaProducerService.sendHelloEmail(persInf.getEmail(), persInf.getName());
+            persInfService.save(persInf);
+            return "redirect:/persInf";
+        } catch (Exception e) {
+            log.error("Error creating persInf", e);
+            return "redirect:/error/retry";
         }
-
-        Users user = userDetailsService.getCurrentUser();
-
-        persInf.setUser(user);
-
-        kafkaProducerService.sendHelloEmail(persInf.getEmail(), persInf.getName());
-        persInfService.save(persInf);
-        return "redirect:/persInf";
-
     }
 
     @GetMapping("/{id}/edit")
     public String edit(Model model, @PathVariable("id") UUID id) {
-
-        PersInf existingPersInf = persInfService.findOne(id);
-
-        model.addAttribute("persInf", existingPersInf);
-        return "persInf/edit";
+        try {
+            PersInf existingPersInf = persInfService.findOne(id);
+            model.addAttribute("persInf", existingPersInf);
+            return "persInf/edit";
+        } catch (Exception e) {
+            log.error("Error loading edit page for persInf with id: {}", id, e);
+            return "redirect:/error/retry";
+        }
     }
 
     @PostMapping("/{id}")
     public String update(@PathVariable("id") UUID id, @ModelAttribute("persInf") @Valid PersInf persInf, BindingResult bindingResult) {
+        try {
+            if (bindingResult.hasErrors()) {
+                return "persInf/edit";
+            }
 
-        if (bindingResult.hasErrors()) {
-            return "persInf/edit";
+            Users user = userDetailsService.getCurrentUser();
+            persInf.setUser(user);
+
+            persInfService.update(id, persInf);
+            return "redirect:/persInf";
+        } catch (Exception e) {
+            log.error("Error updating persInf with id: {}", id, e);
+            return "redirect:/error/retry";
         }
-
-        Users user = userDetailsService.getCurrentUser();
-
-        persInf.setUser(user);
-
-        persInfService.update(id, persInf);
-        return "redirect:/persInf";
 
     }
 
     @DeleteMapping("/{id}")
     public String delete(@PathVariable("id") UUID id) {
+        try {
+            Users currentUser = userDetailsService.getCurrentUser();
+            PersInf existingPersInf = persInfService.findOne(id);
 
-        Users currentUser = userDetailsService.getCurrentUser();
+            if (!existingPersInf.getUser().getId().equals(currentUser.getId())) {
+                return "redirect:/error/mismatchid";
+            }
 
-        PersInf existingPersInf = persInfService.findOne(id);
-
-        if (!existingPersInf.getUser().getId().equals(currentUser.getId())) {
-            return "redirect:/error/mismatchid";
+            persInfService.delete(id);
+            return "redirect:/persInf";
+        } catch (Exception e) {
+            log.error("Error deleting persInf with id: {}", id, e);
+            return "redirect:/error/retry";
         }
-
-
-        persInfService.delete(id);
-        return "redirect:/persInf";
     }
 
     @GetMapping("/search")
@@ -123,8 +143,12 @@ public class PersInfController {
 
     @PostMapping("/search")
     public String makeSearch(Model model, @RequestParam("surname") String surname){
-        model.addAttribute("persInf", persInfService.searchBySurname(surname));
-        return "persInf/search";
+        try {
+            model.addAttribute("persInf", persInfService.searchBySurname(surname));
+            return "persInf/search";
+        } catch (Exception e) {
+            log.error("Error searching persInf by surname: {}", surname, e);
+            return "redirect:/error/retry";
+        }
     }
-
 }

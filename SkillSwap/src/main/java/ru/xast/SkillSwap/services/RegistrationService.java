@@ -12,13 +12,11 @@ public class RegistrationService {
 
     private final PasswordEncoder passwordEncoder;
     private final UsersRepository usersRepository;
-    private final KafkaProducerService kafkaProducerService;
 
     @Autowired
-    public RegistrationService(PasswordEncoder passwordEncoder, UsersRepository usersRepository, KafkaProducerService kafkaProducerService) {
+    public RegistrationService(PasswordEncoder passwordEncoder, UsersRepository usersRepository) {
         this.passwordEncoder = passwordEncoder;
         this.usersRepository = usersRepository;
-        this.kafkaProducerService = kafkaProducerService;
     }
 
     @Transactional
@@ -26,7 +24,6 @@ public class RegistrationService {
         String encodedPassword = passwordEncoder.encode(users.getPassword());
         users.setPassword(encodedPassword);
         users.setRole("ROLE_USER");
-        //kafkaProducerService.send(users.getUsername());
         usersRepository.save(users);
     }
 }

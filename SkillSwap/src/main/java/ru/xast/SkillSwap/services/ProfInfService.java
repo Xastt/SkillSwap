@@ -1,6 +1,7 @@
 package ru.xast.SkillSwap.services;
 
 import jakarta.persistence.EntityNotFoundException;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
@@ -11,8 +12,10 @@ import ru.xast.SkillSwap.repositories.PersInfRepository;
 import ru.xast.SkillSwap.repositories.ProfInfRepository;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
+@Slf4j
 @Service
 @Transactional
 public class ProfInfService {
@@ -28,57 +31,106 @@ public class ProfInfService {
     }
 
     public void save(ProfInf profInf){
-        profInfRepository.save(profInf);
+        try{
+            profInfRepository.save(profInf);
+            log.info("ProfInf saved, id: {}", profInf.getId());
+        }catch(Exception e){
+            log.error("Error saving ProfInf: {}", e.getMessage());
+            throw new RuntimeException("Failed to saved ProfInf: " + e.getMessage());
+        }
+
     }
 
     @Transactional(readOnly = true)
     public ProfInf findOne(UUID id){
-        return profInfRepository.findById(id).orElse(null);
+        try {
+            Optional<ProfInf> profInf = profInfRepository.findById(id);
+            if(profInf.isPresent()){
+                log.info("ProfInf found, id: {}", id);
+                return profInf.get();
+            }else{
+                log.warn("ProfInf not found, id: {}", id);
+                return null;
+            }
+        }catch(Exception e){
+            log.error("Error finding ProfInf: {}", e.getMessage());
+            throw new RuntimeException("Failed to find ProfInf: " + e.getMessage());
+        }
     }
 
     @Transactional(readOnly = true)
     public ProfInf findProfInfByUserId(UUID userId) {
-        return profInfRepository.findProfInfByUserId(userId);
+        try{
+            ProfInf profInf = profInfRepository.findProfInfByUserId(userId);
+            if(profInf != null){
+                log.info("ProfInf found with id: {}", profInf.getId());
+            }else{
+                log.warn("ProfInf not found with id: {}", userId);
+            }
+            return profInf;
+        }catch(Exception e){
+            log.error("Error in finding ProfInf: {}", e.getMessage());
+            throw new RuntimeException("Failed to find ProfInf: " + e.getMessage());
+        }
     }
 
     @Transactional(readOnly = true)
     public ProfInf findProfInfByPersId(UUID userId) {
-        return profInfRepository.findProfInfByPersId(userId);
+        try{
+            ProfInf profInf = profInfRepository.findProfInfByPersId(userId);
+            if(profInf != null){
+                log.info("ProfInf found with id : {}", profInf.getId());
+            }else {
+                log.warn("ProfInf not found with id : {}", userId);
+            }
+            return profInf;
+        }catch(Exception e){
+            log.error("Error in finding ProfInf : {}", e.getMessage());
+            throw new RuntimeException("Failed to find ProfInf: " + e.getMessage());
+        }
     }
 
     @Transactional(readOnly = true)
     public List<ProfInf> findAll() {
-        return profInfRepository.findAll();
+        try{
+            List<ProfInf> profInfList = profInfRepository.findAll();
+            log.info("ProfInf found {} records", profInfList.size());
+            return profInfList;
+        }catch(Exception e){
+            log.error("Error finding all ProfInf records: {}", e.getMessage());
+            throw new RuntimeException("Failed to find all ProfInf records: " + e.getMessage());
+        }
     }
 
     public void update(UUID id, ProfInf updatedProfInf){
-        updatedProfInf.setId(id);
-        profInfRepository.save(updatedProfInf);
+        try{
+            updatedProfInf.setId(id);
+            profInfRepository.save(updatedProfInf);
+            log.info("ProfInf updated, id: {}", id);
+        }catch(Exception e){
+            log.error("Error updating ProfInf: {}", e.getMessage());
+            throw new RuntimeException("Failed to update ProfInf: " + e.getMessage());
+        }
     }
 
     public void delete(UUID id){
-        profInfRepository.deleteById(id);
-    }
-
-    public void saveWithPersInf(UUID persInfId, ProfInf profInf) {
-        PersInf persInf = persInfRepository.findById(persInfId).orElse(null);
-        if (persInf != null) {
-            profInf.setPers(persInf);
-            profInfRepository.save(profInf);
-        } else {
-            throw new EntityNotFoundException("Personal information not found for ID: " + persInfId);
+        try{
+            profInfRepository.deleteById(id);
+            log.info("ProfInf deleted, id: {}", id);
+        }catch(Exception e){
+            log.error("Error deleting ProfInf: {}", e.getMessage());
+            throw new RuntimeException("Failed to delete ProfInf: " + e.getMessage());
         }
     }
 
     public List<ProfInf> searchBySkillName(String skillName) {
-        return profInfRepository.findBySkillNameStartingWith(skillName);
-    }
-
-    public List<PersInf> findAll(boolean sortByRating){
-        if(sortByRating){
-            return persInfRepository.findAll(Sort.by("rating"));
-        }else{
-            return persInfRepository.findAll();
+        try {
+            List<ProfInf> profInfList = profInfRepository.findBySkillNameStartingWith(skillName);
+            log.info("ProfInf found {} records with SkillName", profInfList.size());
+            return profInfList;
+        }catch (Exception e){
+            log.error("Error searching ProfInf by SkillName: {}", e.getMessage());
+            throw new RuntimeException("Failed to search ProfInf by SkillName: " + e.getMessage());
         }
     }
 }

@@ -1,6 +1,7 @@
 package ru.xast.SkillSwap.controllers;
 
 import jakarta.validation.Valid;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -15,6 +16,7 @@ import ru.xast.SkillSwap.services.UsersDetailsService;
 
 import java.util.UUID;
 
+@Slf4j
 @Controller
 @RequestMapping("/profInf")
 public class ProfInfController {
@@ -32,21 +34,25 @@ public class ProfInfController {
 
     @GetMapping()
     public String index(Model model){
-        model.addAttribute("profInf", profInfService.findAll());
-        return "profInf/index";
-    }
+        try{
+            model.addAttribute("profInf", profInfService.findAll());
+            return "profInf/index";
+        }catch(Exception e){
+            log.error("Error loading persInf index page", e);
+            return "redirect:/error/retry";
+        }
 
-    /*@GetMapping()
-    public String index(Model model,
-                        @RequestParam(value = "sort_by_rating", required = false) boolean sortByRating){
-        model.addAttribute("profInf", profInfService.findAll(sortByRating));
-        return "profInf/index";
-    }*/
+    }
 
     @GetMapping("/{id}")
     public String show(@PathVariable("id") UUID id, Model model) {
-        model.addAttribute("profInf", profInfService.findOne(id));
-        return "profInf/show";
+        try {
+            model.addAttribute("profInf", profInfService.findOne(id));
+            return "profInf/show";
+        }catch(Exception e){
+            log.error("Error loading persInf show page", e);
+            return "redirect:/error/retry";
+        }
     }
 
     @GetMapping("/new")
@@ -56,71 +62,89 @@ public class ProfInfController {
 
     @PostMapping()
     public String create(@ModelAttribute("profInf") @Valid ProfInf profInf, BindingResult bindingResult) {
+        try {
+            if (bindingResult.hasErrors()) {
+                return "profInf/new";
+            }
 
-        if (bindingResult.hasErrors()) {
-            return "profInf/new";
+            Users user = userDetailsService.getCurrentUser();
+            profInf.setUser(user);
+
+
+            PersInf persInf = persInfService.findPersInfByUserId(user.getId());
+
+            profInf.setPers(persInf);
+
+            profInfService.save(profInf);
+            return "redirect:/profInf";
+        }catch(Exception e){
+            log.error("Error creating persInf", e);
+            return "redirect:/error/retry";
         }
-
-        Users user = userDetailsService.getCurrentUser();
-        profInf.setUser(user);
-
-
-        PersInf persInf = persInfService.findPersInfByUserId(user.getId());
-
-        profInf.setPers(persInf);
-
-        profInfService.save(profInf);
-        return "redirect:/profInf";
     }
 
     @GetMapping("/{id}/edit")
     public String edit(Model model, @PathVariable("id") UUID id) {
+        try {
 
-        Users currentUser = userDetailsService.getCurrentUser();
+            Users currentUser = userDetailsService.getCurrentUser();
 
-        ProfInf existingProfInf = profInfService.findOne(id);
+            ProfInf existingProfInf = profInfService.findOne(id);
 
-        if(!existingProfInf.getUser().getId().equals(currentUser.getId())){
-            return "redirect:/error/mismatchid";
+            if (!existingProfInf.getUser().getId().equals(currentUser.getId())) {
+                return "redirect:/error/mismatchid";
+            }
+
+            model.addAttribute("profInf", profInfService.findOne(id));
+            return "profInf/edit";
+        }catch(Exception e){
+            log.error("Error loading persInf edit page", e);
+            return "redirect:/error/retry";
         }
-
-        model.addAttribute("profInf", profInfService.findOne(id));
-        return "profInf/edit";
     }
 
     @PostMapping("/{id}")
     public String update(@PathVariable("id") UUID id, @ModelAttribute("profInf") @Valid ProfInf profInf, BindingResult bindingResult) {
+        try {
+            if (bindingResult.hasErrors()) {
+                return "profInf/edit";
+            }
 
-        if (bindingResult.hasErrors()) {
-            return "profInf/edit";
+            Users user = userDetailsService.getCurrentUser();
+
+            profInf.setUser(user);
+
+            PersInf persInf = persInfService.findPersInfByUserId(user.getId());
+
+            profInf.setPers(persInf);
+
+            profInfService.update(id, profInf);
+            return "redirect:/profInf";
+        }catch (Exception e){
+            log.error("Error updating persInf", e);
+            return "redirect:/error/retry";
         }
-
-        Users user = userDetailsService.getCurrentUser();
-
-        profInf.setUser(user);
-
-        PersInf persInf = persInfService.findPersInfByUserId(user.getId());
-
-        profInf.setPers(persInf);
-
-        profInfService.update(id, profInf);
-        return "redirect:/profInf";
 
     }
 
     @DeleteMapping("/{id}")
     public String delete(@PathVariable("id") UUID id) {
+        try {
 
-        Users currentUser = userDetailsService.getCurrentUser();
+            Users currentUser = userDetailsService.getCurrentUser();
 
-        ProfInf existingProfInf = profInfService.findOne(id);
+            ProfInf existingProfInf = profInfService.findOne(id);
 
-        if (!existingProfInf.getUser().getId().equals(currentUser.getId())) {
-            return "redirect:/error/mismatchid";
+            if (!existingProfInf.getUser().getId().equals(currentUser.getId())) {
+                return "redirect:/error/mismatchid";
+            }
+
+            profInfService.delete(id);
+            return "redirect:/profInf";
+        }catch(Exception e){
+            log.error("Error deleting persInf", e);
+            return "redirect:/error/retry";
         }
-
-        profInfService.delete(id);
-        return "redirect:/profInf";
     }
 
     @GetMapping("/search")
@@ -130,8 +154,13 @@ public class ProfInfController {
 
     @PostMapping("/search")
     public String makeSearch(Model model, @RequestParam("skillName") String skillName){
-        model.addAttribute("profInf", profInfService.searchBySkillName(skillName));
-        return "profInf/search";
+        try {
+            model.addAttribute("profInf", profInfService.searchBySkillName(skillName));
+            return "profInf/search";
+        }catch(Exception e){
+            log.error("Error loading persInf search page", e);
+            return "redirect:/error/retry";
+        }
     }
 
 }
