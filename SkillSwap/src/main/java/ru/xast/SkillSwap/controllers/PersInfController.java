@@ -69,7 +69,7 @@ public class PersInfController {
 
         persInf.setUser(user);
 
-        //kafkaProducerService.send(persInf.getEmail(), persInf.getName());
+        kafkaProducerService.sendHelloEmail(persInf.getEmail(), persInf.getName());
         persInfService.save(persInf);
         return "redirect:/persInf";
 

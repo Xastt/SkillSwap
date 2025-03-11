@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+    <meta charset="UTF-8">
+    <title>Index</title>
+    <style>
+        form{
+            max-width: 0px;
+            background: none;
+            padding: 2px;
+            margin-left: 0;
+            box-shadow: 0 0 0px rgba(0, 0, 0, 0.1);
+        }
+        td{
+            width: 80px;
+        }
+    </style>
+</head>
+<body>
+<article>
+    <header>
+        <nav class="clear">
+            <ul>
+                <li><a>Go Back To -></a></li>
+                <li><a href="/persInf">Person Page</a></li>
+                <li><a href="/profInf">Skills Page</a></li>
+            </ul>
+        </nav>
+        <h1>SkillSwap</h1>
+    </header>
+
+    <ul>
+        <h1>Error!</h1>
+        <div class = "for-list">
+            <p style="
+        font-size: 1.3em;
+        color: #333333;
+        line-height: 1.8;
+        text-align: left;
+        padding: 20px;
+        font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+        font-weight: 300;
+        letter-spacing: 0.5px;
+        background: #f0f0f0;
+        border-radius: 10px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    ">You can't make a lesson with yourself!</p>
+        </div>
+    </ul>
+
+</article>
+</body>
+</html>

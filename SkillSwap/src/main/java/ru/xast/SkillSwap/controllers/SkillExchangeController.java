@@ -2,8 +2,6 @@ package ru.xast.SkillSwap.controllers;
 
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -24,15 +22,17 @@ public class SkillExchangeController {
     private final ProfInfService profInfService;
     private final SkillExchangeService skillExchangeService;
     private final TransactionService transactionService;
+    private final KafkaProducerService kafkaProducerService;
 
     @Autowired
-    public SkillExchangeController(PersInfService persInfService, ReviewService reviewService, UsersDetailsService usersDetailsService, ProfInfService profInfService, SkillExchangeService skillExchangeService, TransactionService transactionService) {
+    public SkillExchangeController(PersInfService persInfService, ReviewService reviewService, UsersDetailsService usersDetailsService, ProfInfService profInfService, SkillExchangeService skillExchangeService, TransactionService transactionService, KafkaProducerService kafkaProducerService) {
         this.persInfService = persInfService;
         this.reviewService = reviewService;
         this.usersDetailsService = usersDetailsService;
         this.profInfService = profInfService;
         this.skillExchangeService = skillExchangeService;
         this.transactionService = transactionService;
+        this.kafkaProducerService = kafkaProducerService;
     }
 
     @GetMapping("/{id}")
@@ -47,6 +47,11 @@ public class SkillExchangeController {
 
         PersInf userRequesting = persInfService.findPersInfByUserId(user.getId());
 
+
+        if(userOffering.getPers().getId()==userRequesting.getId()){
+            return "/error/SameIdException";
+        }
+
         SkillExchange skillExchange = new SkillExchange(
                 userOffering.getSkillName(),
                 userOffering.getPers().getId(),
@@ -57,6 +62,8 @@ public class SkillExchangeController {
 
         skillExchangeService.save(skillExchange);
         transactionService.save(transaction);
+
+        kafkaProducerService.sendConnectEmail(userOffering.getPers().getEmail(), userOffering.getPers().getName());
 
         return "skillExchange/showPersInf";
     }
