@@ -25,8 +25,6 @@
                 <li><a href="/persInf">Person Page</a></li>
                 <li><a href="/profInf/new">Provide New Skill</a></li>
                 <li><a href="/profInf/search">Find Skill</a></li>
-                <!--<li><a href="/persInf/search">Find Person</a></li>-->
-                <!--<li><a href = "/persInf?sort_by_rating=true">Sort by Rating!</a></li>-->
             </ul>
         </nav>
         <h1>SkillSwap</h1>
@@ -47,7 +45,7 @@
         <div class = "for-list">
             <p th:each="skill : ${profInf}">
                 <a th:href="@{/profInf/{id}(id=${skill.getId()})}"
-                   th:text="${skill.getSkillName() + ', ' + skill.getCost() + ', ' + skill.getRating()}">skill</a>
+                   th:text="${'Skill name: ' + skill.getSkillName() + ', ' + skill.getCost() + ' Rub., ' + ' Rating: '+ skill.getRating()}">skill</a>
             </p>
         </div>
     </ul>
