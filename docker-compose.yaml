@@ -1,5 +1,7 @@
 version: '3.8'
+
 services:
+
   zookeeper:
     image: confluentinc/cp-zookeeper:7.6.1
     container_name: zookeeper
@@ -8,6 +10,7 @@ services:
       ZOOKEEPER_TICK_TIME: 2000
     ports:
       - "2181:2181"
+
   kafka:
     image: confluentinc/cp-kafka:7.6.1
     container_name: kafka
@@ -25,5 +28,45 @@ services:
     ports:
       - "9092:9092"
       - "9093:9093"
+
+  postgres:
+    image: postgres:16.3
+    container_name: postgres
+    environment:
+      POSTGRES_DB: SkillSwapDB
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  skillswap:
+    build:
+      context: ./SkillSwap
+      dockerfile: Dockerfile
+    container_name: skillswap
+    ports:
+      - "7070:7070"
+    depends_on:
+      - kafka
+      - postgres
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/SkillSwapDB
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: postgres
+
+  skillswapmailsender:
+    build:
+      context: ./SkillSwapMailSender
+      dockerfile: Dockerfile
+    container_name: skillswapmailsender
+    ports:
+      - "7071:7071"
+    depends_on:
+      - kafka
+
+volumes:
+  postgres_data:
 
 
