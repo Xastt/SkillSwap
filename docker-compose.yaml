@@ -65,7 +65,6 @@ services:
       - "7071:7071"
     depends_on:
       - kafka
-
 volumes:
   postgres_data:
 
