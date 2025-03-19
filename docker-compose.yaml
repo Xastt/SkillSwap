@@ -55,6 +55,8 @@ services:
       SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/SkillSwapDB
       SPRING_DATASOURCE_USERNAME: postgres
       SPRING_DATASOURCE_PASSWORD: postgres
+      SPRING_KAFKA_BOOTSTRAP_SERVERS: kafka:9092
+
 
   skillswapmailsender:
     build:
@@ -65,6 +67,8 @@ services:
       - "7071:7071"
     depends_on:
       - kafka
+    environment:
+      SPRING_KAFKA_BOOTSTRAP_SERVERS: kafka:9092
 volumes:
   postgres_data:
 
