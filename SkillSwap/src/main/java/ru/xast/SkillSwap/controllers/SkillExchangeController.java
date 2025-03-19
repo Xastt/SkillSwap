@@ -90,7 +90,7 @@ public class SkillExchangeController {
 
             return "skillExchange/review";
         }catch (Exception e) {
-            log.error("Error in success in ReviewController", e);
+            log.error("Error in success in SkillExchangeController", e);
             return "redirect:/error/retry";
         }
     }
