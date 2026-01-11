@@ -66,10 +66,46 @@ jobs:
           echo "Building SkillSwapMailSender..."
           cd ../SkillSwapMailSender && mvn -B clean package -DskipTests
           echo "Checking JAR files..."
-          ls -la SkillSwap/target/*.jar
-          ls -la SkillSwapMailSender/target/*.jar
+          ls -la SkillSwap/target/ || echo "SkillSwap/target не существует"
+          ls -la SkillSwapMailSender/target/ || echo "SkillSwapMailSender/target не существует"
+          echo "Listing all files in target directories..."
+          find SkillSwap/target -type f -name "*.jar" 2>/dev/null || echo "No JAR files found in SkillSwap/target"
+          find SkillSwapMailSender/target -type f -name "*.jar" 2>/dev/null || echo "No JAR files found in SkillSwapMailSender/target"
 
-      # 4. Запускаем Docker Compose для проверки
+      # 4. Копируем JAR файлы с правильными именами
+      - name: Copy JAR files with correct names
+        run: |
+          echo "Копируем JAR файлы с правильными именами..."
+          
+          # Для SkillSwap
+          if [ -f "SkillSwap/target/SkillSwap-0.0.1-SNAPSHOT.jar.original" ]; then
+            echo "Found original JAR for SkillSwap, copying..."
+            cp SkillSwap/target/SkillSwap-0.0.1-SNAPSHOT.jar.original SkillSwap/target/SkillSwap-0.0.1-SNAPSHOT.jar
+          elif [ -f "SkillSwap/target/SkillSwap-0.0.1-SNAPSHOT.jar" ]; then
+            echo "Found repackaged JAR for SkillSwap"
+          else
+            echo "ERROR: No JAR file found for SkillSwap!"
+            find SkillSwap/target -type f -name "*.jar*" 2>/dev/null
+            exit 1
+          fi
+          
+          # Для SkillSwapMailSender
+          if [ -f "SkillSwapMailSender/target/SkillSwapMailSender-0.0.1-SNAPSHOT.jar.original" ]; then
+            echo "Found original JAR for SkillSwapMailSender, copying..."
+            cp SkillSwapMailSender/target/SkillSwapMailSender-0.0.1-SNAPSHOT.jar.original SkillSwapMailSender/target/SkillSwapMailSender-0.0.1-SNAPSHOT.jar
+          elif [ -f "SkillSwapMailSender/target/SkillSwapMailSender-0.0.1-SNAPSHOT.jar" ]; then
+            echo "Found repackaged JAR for SkillSwapMailSender"
+          else
+            echo "ERROR: No JAR file found for SkillSwapMailSender!"
+            find SkillSwapMailSender/target -type f -name "*.jar*" 2>/dev/null
+            exit 1
+          fi
+          
+          echo "Final JAR files:"
+          ls -la SkillSwap/target/*.jar 2>/dev/null || echo "No JAR in SkillSwap/target"
+          ls -la SkillSwapMailSender/target/*.jar 2>/dev/null || echo "No JAR in SkillSwapMailSender/target"
+
+      # 5. Запускаем Docker Compose для проверки
       - name: Start services with Docker Compose
         run: |
           echo "Проверяем версию Docker Compose..."
@@ -85,24 +121,24 @@ jobs:
           docker compose ps
           
           echo "Логи SkillSwap:"
-          docker logs skillswap --tail 50 || echo "Контейнер skillswap не найден"
+          docker logs skillswap --tail 50 2>/dev/null || echo "Контейнер skillswap не найден или еще не запущен"
           
           echo "Логи SkillSwapMailSender:"
-          docker logs skillswapmailsender --tail 50 || echo "Контейнер skillswapmailsender не найден"
+          docker logs skillswapmailsender --tail 50 2>/dev/null || echo "Контейнер skillswapmailsender не найден или еще не запущен"
           
           echo "Проверяем, что контейнеры запущены..."
-          if docker compose ps | grep -q "Exit"; then
+          if docker compose ps 2>/dev/null | grep -q "Exit"; then
             echo "Некоторые контейнеры завершились с ошибкой!"
             docker compose logs
             exit 1
           fi
 
-      # 5. Останавливаем сервисы
+      # 6. Останавливаем сервисы
       - name: Cleanup Docker containers
         if: always()
         run: |
           echo "Останавливаем сервисы..."
-          docker compose down -v || true
+          docker compose down -v 2>/dev/null || true
           
           echo "Очищаем Docker образы..."
-          docker system prune -af || true
+          docker system prune -af 2>/dev/null || true
