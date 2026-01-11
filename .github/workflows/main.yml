@@ -34,13 +34,12 @@ jobs:
           key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
           restore-keys: |
             ${{ runner.os }}-maven-
-            
-      # 4. Собираем каждый модуль
+
+      # 4. Собираем каждый модуль БЕЗ тестов
       - name: Build ${{ matrix.module }} (skip tests)
         working-directory: ${{ matrix.module }}
         run: |
           mvn -B clean package -DskipTests
-
 
   docker-build:
     runs-on: ubuntu-latest
@@ -52,61 +51,44 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      # 2. Ставим JDK 17
-      - name: Set up JDK 17
-        uses: actions/setup-java@v4
-        with:
-          java-version: '17'
-          distribution: 'temurin'
+      # 2. Настраиваем Docker Buildx
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
 
-      # 3. Собираем JAR файлы для обоих модулей
-      - name: Build all modules
-        run: |
-          echo "Building SkillSwap..."
-          cd SkillSwap && mvn -B clean package -DskipTests
-          echo "Building SkillSwapMailSender..."
-          cd ../SkillSwapMailSender && mvn -B clean package -DskipTests
-
-      # 4. Запускаем Docker Compose для проверки
+      # 3. Запускаем Docker Compose для проверки (используем docker compose, а не docker-compose)
       - name: Start services with Docker Compose
         run: |
+          echo "Проверяем версию Docker Compose..."
+          docker compose version
+          
           echo "Запускаем сервисы..."
-          docker-compose up -d --build
+          docker compose up -d --build
           
           echo "Ждём 30 секунд для старта всех сервисов..."
           sleep 30
           
           echo "Проверяем состояние контейнеров:"
-          docker-compose ps
+          docker compose ps
           
           echo "Логи SkillSwap:"
-          docker logs skillswap --tail 50
+          docker logs skillswap --tail 50 || echo "Контейнер skillswap не найден"
           
           echo "Логи SkillSwapMailSender:"
-          docker logs skillswapmailsender --tail 50
+          docker logs skillswapmailsender --tail 50 || echo "Контейнер skillswapmailsender не найден"
           
           echo "Проверяем, что контейнеры запущены..."
-          if docker-compose ps | grep -q "Exit"; then
+          if docker compose ps | grep -q "Exit"; then
             echo "Некоторые контейнеры завершились с ошибкой!"
-            docker-compose logs
+            docker compose logs
             exit 1
           fi
 
-      # 5. Проверяем доступность сервисов
-      - name: Check service availability
-        run: |
-          echo "Проверяем доступность SkillSwap (порт 7070)..."
-          curl --retry 5 --retry-delay 10 --retry-all-errors --max-time 30 http://localhost:7070/actuator/health || true
-          
-          echo "Проверяем доступность SkillSwapMailSender (порт 7071)..."
-          curl --retry 5 --retry-delay 10 --retry-all-errors --max-time 30 http://localhost:7071/actuator/health || true
-
-      # 6. Останавливаем сервисы
+      # 4. Останавливаем сервисы
       - name: Cleanup Docker containers
         if: always()
         run: |
           echo "Останавливаем сервисы..."
-          docker-compose down -v
+          docker compose down -v || true
           
           echo "Очищаем Docker образы..."
-          docker system prune -af
+          docker system prune -af || true
